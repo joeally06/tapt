@@ -48,9 +48,11 @@ const conference = await getLatestConference();
                 <div class="attendee-section border-t pt-6 first:border-t-0 first:pt-0 hidden" data-attendee={num}>
                   <div class="flex justify-between items-center mb-4">
                     <h3 class="text-lg font-medium">Attendee {num} {num === 1 ? '*' : ''}</h3>
-                    <button type="button" class="remove-attendee text-red-600 hover:text-red-800 text-sm">
-                      Remove
-                    </button>
+                    {num > 1 && (
+                      <button type="button" class="remove-attendee text-red-600 hover:text-red-800 text-sm">
+                        Remove
+                      </button>
+                    )}
                   </div>
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -131,11 +133,11 @@ const conference = await getLatestConference();
 </Layout>
 
 <script>
-  const form = document.getElementById('registration-form');
+  const form = document.getElementById('registration-form') as HTMLFormElement;
   const attendeesContainer = document.getElementById('attendees-container');
   const addAttendeeBtn = document.getElementById('add-attendee');
   const attendeeCountSpan = document.getElementById('attendee-count');
-  const totalAmountInput = form?.querySelector('[name="totalAmount"]');
+  const totalAmountInput = form?.querySelector('[name="totalAmount"]') as HTMLInputElement;
   const totalAmountSection = document.getElementById('total-amount-section');
   const errorMessageDiv = document.getElementById('error-message');
   const PRICE_PER_ATTENDEE = 175;
@@ -217,7 +219,7 @@ const conference = await getLatestConference();
     e.preventDefault();
     hideError();
 
-    const formData = new FormData(e.target as HTMLFormElement);
+    const formData = new FormData(form);
     const visibleAttendees = getVisibleAttendeeCount();
     
     if (visibleAttendees === 0) {
@@ -234,7 +236,7 @@ const conference = await getLatestConference();
       }
     }
 
-    const submitButton = form.querySelector('button[type="submit"]');
+    const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement;
     if (submitButton) {
       submitButton.disabled = true;
       submitButton.textContent = 'Submitting...';
@@ -255,9 +257,8 @@ const conference = await getLatestConference();
         body: JSON.stringify(requestData),
       });
 
-      const responseData = await response.json();
-
       if (!response.ok) {
+        const responseData = await response.json();
         throw new Error(responseData.error || 'Registration failed. Please try again.');
       }
 

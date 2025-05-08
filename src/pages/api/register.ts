@@ -8,9 +8,22 @@ export const POST: APIRoute = async ({ request }) => {
   };
 
   try {
+    if (!request.body) {
+      return new Response(
+        JSON.stringify({ error: 'Request body is required' }), 
+        { status: 400, headers }
+      );
+    }
+
     let data;
     try {
       const text = await request.text();
+      if (!text) {
+        return new Response(
+          JSON.stringify({ error: 'Empty request body' }), 
+          { status: 400, headers }
+        );
+      }
       data = JSON.parse(text);
     } catch (e) {
       console.error('JSON parse error:', e);
