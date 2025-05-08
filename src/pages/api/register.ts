@@ -9,6 +9,7 @@ export const POST: APIRoute = async ({ request }) => {
 
   try {
     if (!request.body) {
+      console.error('No request body provided');
       return new Response(
         JSON.stringify({ error: 'Request body is required' }), 
         { status: 400, headers }
@@ -18,13 +19,18 @@ export const POST: APIRoute = async ({ request }) => {
     let data;
     try {
       const text = await request.text();
+      console.log('Raw request body:', text); // Debug log
+      
       if (!text) {
+        console.error('Empty request body text');
         return new Response(
           JSON.stringify({ error: 'Empty request body' }), 
           { status: 400, headers }
         );
       }
+      
       data = JSON.parse(text);
+      console.log('Parsed request data:', data); // Debug log
     } catch (e) {
       console.error('JSON parse error:', e);
       return new Response(
@@ -35,6 +41,7 @@ export const POST: APIRoute = async ({ request }) => {
     
     // Validate required fields
     if (!data.organization) {
+      console.error('Missing organization field');
       return new Response(
         JSON.stringify({ error: 'Organization is required' }), 
         { status: 400, headers }
@@ -42,6 +49,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     if (!data.attendees || !Array.isArray(data.attendees) || data.attendees.length === 0) {
+      console.error('Invalid or missing attendees:', data.attendees);
       return new Response(
         JSON.stringify({ error: 'At least one attendee is required' }), 
         { status: 400, headers }
@@ -51,6 +59,7 @@ export const POST: APIRoute = async ({ request }) => {
     // Validate each attendee has required fields
     for (const attendee of data.attendees) {
       if (!attendee || typeof attendee !== 'object') {
+        console.error('Invalid attendee data format:', attendee);
         return new Response(
           JSON.stringify({ error: 'Invalid attendee data format' }), 
           { status: 400, headers }
@@ -58,6 +67,7 @@ export const POST: APIRoute = async ({ request }) => {
       }
 
       if (!attendee.firstName || !attendee.lastName) {
+        console.error('Missing required attendee fields:', attendee);
         return new Response(
           JSON.stringify({ error: 'First name and last name are required for all attendees' }), 
           { status: 400, headers }
@@ -66,13 +76,16 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     if (typeof data.totalAmount !== 'number' || data.totalAmount <= 0) {
+      console.error('Invalid total amount:', data.totalAmount);
       return new Response(
         JSON.stringify({ error: 'Invalid total amount' }), 
         { status: 400, headers }
       );
     }
 
+    console.log('Processing registration with data:', data); // Debug log
     const registration = await createRegistration(data);
+    console.log('Registration created:', registration); // Debug log
 
     return new Response(
       JSON.stringify({ success: true, data: registration }), 
