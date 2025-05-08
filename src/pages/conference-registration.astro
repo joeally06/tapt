@@ -181,6 +181,10 @@ const conference = await getLatestConference();
     return document.querySelectorAll('.attendee-section:not(.hidden)').length;
   }
 
+  function getVisibleAttendeeSections() {
+    return Array.from(document.querySelectorAll('.attendee-section:not(.hidden)'));
+  }
+
   // Show first attendee section by default
   const firstAttendeeSection = document.querySelector('.attendee-section');
   if (firstAttendeeSection) {
@@ -220,7 +224,7 @@ const conference = await getLatestConference();
     hideError();
 
     const formData = new FormData(form);
-    const organization = formData.get('organization')?.toString();
+    const organization = formData.get('organization')?.toString().trim();
     const visibleAttendees = getVisibleAttendeeCount();
     
     if (!organization) {
@@ -234,12 +238,15 @@ const conference = await getLatestConference();
     }
 
     const attendees = [];
-    for (let i = 1; i <= visibleAttendees; i++) {
-      const firstName = formData.get(`attendee${i}FirstName`)?.toString();
-      const lastName = formData.get(`attendee${i}LastName`)?.toString();
+    const visibleSections = getVisibleAttendeeSections();
+    
+    for (const section of visibleSections) {
+      const attendeeNum = section.getAttribute('data-attendee');
+      const firstName = formData.get(`attendee${attendeeNum}FirstName`)?.toString().trim();
+      const lastName = formData.get(`attendee${attendeeNum}LastName`)?.toString().trim();
       
       if (!firstName || !lastName) {
-        showError(`Please fill in all fields for Attendee ${i}`);
+        showError(`Please fill in all fields for Attendee ${attendeeNum}`);
         return;
       }
       
