@@ -5,7 +5,7 @@ export const POST: APIRoute = async ({ request }) => {
   try {
     const data = await request.json();
     
-    const registration = createRegistration(data);
+    const registration = await createRegistration(data);
 
     return new Response(JSON.stringify({ success: true, data: registration }), {
       status: 200,

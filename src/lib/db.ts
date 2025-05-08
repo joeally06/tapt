@@ -1,15 +1,11 @@
-import Database from 'better-sqlite3';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { createClient } from '@libsql/client';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const dbPath = join(__dirname, '../../data/conference.db');
-
-const db = new Database(dbPath);
+const client = createClient({
+  url: 'file:conference.db',
+});
 
 // Initialize database with required tables
-db.exec(`
+await client.execute(`
   CREATE TABLE IF NOT EXISTS conferences (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
@@ -41,9 +37,9 @@ db.exec(`
 `);
 
 // Insert sample conference if none exists
-const conferenceCount = db.prepare('SELECT COUNT(*) as count FROM conferences').get();
-if (conferenceCount.count === 0) {
-  db.prepare(`
+const conferenceCount = await client.execute('SELECT COUNT(*) as count FROM conferences');
+if (conferenceCount.rows[0].count === 0) {
+  await client.execute(`
     INSERT INTO conferences (id, name, start_date, end_date, location, description, price, max_attendees)
     VALUES (
       'conf-2025',
@@ -55,45 +51,34 @@ if (conferenceCount.count === 0) {
       175.00,
       200
     )
-  `).run();
+  `);
 }
 
-export const getLatestConference = () => {
-  return db.prepare('SELECT * FROM conferences ORDER BY start_date ASC LIMIT 1').get();
+export const getLatestConference = async () => {
+  const result = await client.execute('SELECT * FROM conferences ORDER BY start_date ASC LIMIT 1');
+  return result.rows[0];
 };
 
-export const createRegistration = (data) => {
+export const createRegistration = async (data) => {
   const registrationId = 'reg-' + Math.random().toString(36).substr(2, 9);
   
-  db.transaction(() => {
+  await client.transaction(async (tx) => {
     // Create registration
-    db.prepare(`
+    await tx.execute(`
       INSERT INTO registrations (id, organization, total_attendees, total_amount, conference_id)
       VALUES (?, ?, ?, ?, ?)
-    `).run(
-      registrationId,
-      data.organization,
-      data.attendees.length,
-      data.totalAmount,
-      'conf-2025'
-    );
+    `, [registrationId, data.organization, data.attendees.length, data.totalAmount, 'conf-2025']);
 
     // Create attendees
-    const insertAttendee = db.prepare(`
-      INSERT INTO attendees (id, registration_id, first_name, last_name)
-      VALUES (?, ?, ?, ?)
-    `);
-
-    data.attendees.forEach((attendee, index) => {
-      const attendeeId = `att-${registrationId}-${index + 1}`;
-      insertAttendee.run(
-        attendeeId,
-        registrationId,
-        attendee.firstName,
-        attendee.lastName
-      );
-    });
-  })();
+    for (let i = 0; i < data.attendees.length; i++) {
+      const attendee = data.attendees[i];
+      const attendeeId = `att-${registrationId}-${i + 1}`;
+      await tx.execute(`
+        INSERT INTO attendees (id, registration_id, first_name, last_name)
+        VALUES (?, ?, ?, ?)
+      `, [attendeeId, registrationId, attendee.firstName, attendee.lastName]);
+    }
+  });
 
   return { id: registrationId };
 };
