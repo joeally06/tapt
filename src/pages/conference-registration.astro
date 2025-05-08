@@ -259,13 +259,31 @@ const conference = await getLatestConference();
       return;
     }
 
-    const conferenceData = JSON.parse(form.dataset.conference || '{}');
+    let conferenceData;
+    try {
+      conferenceData = JSON.parse(form.dataset.conference || '{}');
+      if (!conferenceData.id) {
+        throw new Error('Invalid conference data');
+      }
+    } catch (error) {
+      console.error('Error parsing conference data:', error);
+      showError('Invalid conference data. Please refresh the page and try again.');
+      return;
+    }
+
     const requestData = {
       conferenceId: conferenceData.id,
       organization,
       attendees,
       totalAmount
     };
+
+    // Validate request data before sending
+    if (!requestData.conferenceId || !requestData.organization || !requestData.attendees.length || !requestData.totalAmount) {
+      console.error('Invalid request data:', requestData);
+      showError('Invalid form data. Please check all fields and try again.');
+      return;
+    }
 
     const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement;
     if (submitButton) {
@@ -274,6 +292,7 @@ const conference = await getLatestConference();
     }
 
     try {
+      console.log('Sending registration data:', requestData);
       const response = await fetch('/api/register', {
         method: 'POST',
         headers: {
