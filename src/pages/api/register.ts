@@ -5,10 +5,7 @@ export const POST: APIRoute = async ({ request }) => {
   try {
     const data = await request.json();
     
-    const registration = createRegistration({
-      ...data,
-      conferenceId: 'conf-2025'
-    });
+    const registration = createRegistration(data);
 
     return new Response(JSON.stringify({ success: true, data: registration }), {
       status: 200,

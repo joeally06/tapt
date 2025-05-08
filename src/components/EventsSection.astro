@@ -6,7 +6,7 @@ const events = [
     date: "June 2-4, 2025",
     location: "Music Road Hotel, Pigeon Forge-Gatlinburg",
     description: "Join us for the annual Tennessee Association of Pupil Transportation Conference and Trade Show. Network with peers, attend educational sessions, and explore the latest in pupil transportation.",
-    link: "https://form.jotform.com/250064554813959",
+    link: "/conference-registration",
     linkText: "Register for Conference",
     image: "https://static.wixstatic.com/media/307eed_66098df81ced437f9f69650b36a8e21d~mv2.jpg/v1/fill/w_236,h_124,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/307eed_66098df81ced437f9f69650b36a8e21d~mv2.jpg"
   },
@@ -92,8 +92,6 @@ const luncheons = [
             <p class="text-gray-600 mb-6">{event.description}</p>
             <a 
               href={event.link} 
-              target="_blank"
-              rel="noopener"
               class="block w-full text-center py-2 px-4 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-md transition-colors"
             >
               {event.linkText}

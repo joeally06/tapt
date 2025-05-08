@@ -23,14 +23,20 @@ db.exec(`
 
   CREATE TABLE IF NOT EXISTS registrations (
     id TEXT PRIMARY KEY,
-    first_name TEXT NOT NULL,
-    last_name TEXT NOT NULL,
-    email TEXT NOT NULL,
     organization TEXT NOT NULL,
-    dietary TEXT,
+    total_attendees INTEGER NOT NULL,
+    total_amount NUMERIC NOT NULL,
     conference_id TEXT NOT NULL,
     created_at TEXT DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (conference_id) REFERENCES conferences (id)
+  );
+
+  CREATE TABLE IF NOT EXISTS attendees (
+    id TEXT PRIMARY KEY,
+    registration_id TEXT NOT NULL,
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
+    FOREIGN KEY (registration_id) REFERENCES registrations (id)
   );
 `);
 
@@ -45,8 +51,8 @@ if (conferenceCount.count === 0) {
       '2025-06-02',
       '2025-06-04',
       'Music Road Hotel, Pigeon Forge-Gatlinburg',
-      'Join us for the annual Tennessee Association of Pupil Transportation Conference and Trade Show. Network with peers, attend educational sessions, and explore the latest in pupil transportation.',
-      299.99,
+      'Join us for the annual Tennessee Association of Pupil Transportation Conference and Trade Show.',
+      175.00,
       200
     )
   `).run();
@@ -56,21 +62,38 @@ export const getLatestConference = () => {
   return db.prepare('SELECT * FROM conferences ORDER BY start_date ASC LIMIT 1').get();
 };
 
-export const createRegistration = (registration) => {
-  const stmt = db.prepare(`
-    INSERT INTO registrations (id, first_name, last_name, email, organization, dietary, conference_id)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
-  `);
+export const createRegistration = (data) => {
+  const registrationId = 'reg-' + Math.random().toString(36).substr(2, 9);
   
-  const id = 'reg-' + Math.random().toString(36).substr(2, 9);
-  
-  return stmt.run(
-    id,
-    registration.firstName,
-    registration.lastName,
-    registration.email,
-    registration.organization,
-    registration.dietary || null,
-    registration.conferenceId
-  );
+  db.transaction(() => {
+    // Create registration
+    db.prepare(`
+      INSERT INTO registrations (id, organization, total_attendees, total_amount, conference_id)
+      VALUES (?, ?, ?, ?, ?)
+    `).run(
+      registrationId,
+      data.organization,
+      data.attendees.length,
+      data.totalAmount,
+      'conf-2025'
+    );
+
+    // Create attendees
+    const insertAttendee = db.prepare(`
+      INSERT INTO attendees (id, registration_id, first_name, last_name)
+      VALUES (?, ?, ?, ?)
+    `);
+
+    data.attendees.forEach((attendee, index) => {
+      const attendeeId = `att-${registrationId}-${index + 1}`;
+      insertAttendee.run(
+        attendeeId,
+        registrationId,
+        attendee.firstName,
+        attendee.lastName
+      );
+    });
+  })();
+
+  return { id: registrationId };
 };
