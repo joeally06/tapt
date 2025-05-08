@@ -1,0 +1,67 @@
+---
+const contacts = [
+  {
+    name: "Dawn Cox",
+    title: "TAPT REGION 6 DIRECTOR",
+    email: "coxd@loudoncounty.org",
+    image: "https://static.wixstatic.com/media/307eed_30e9f195dcc84405aca25f0a718e9a69~mv2.png/v1/fill/w_198,h_344,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/BRADFORD%20%26%20COX_bmp.png"
+  },
+  {
+    name: "Dewayne Ferrell",
+    title: "TAPT REGION 3 DIRECTOR",
+    email: "dewayne.ferrell@mnps.org",
+    image: "https://static.wixstatic.com/media/307eed_772c0fcc833640299be304ffc085ccd8~mv2.jpg/v1/fill/w_312,h_311,al_c,lg_1,q_80,enc_avif,quality_auto/Dewayne%20Ferrell%20-%20Crop.jpg"
+  }
+];
+---
+
+<section id="contact" class="py-16 bg-white">
+  <div class="container mx-auto px-4">
+    <div class="max-w-3xl mx-auto text-center mb-12">
+      <h2 class="text-3xl font-bold text-primary-800 mb-4">Contact Us</h2>
+      <div class="w-20 h-1 bg-accent-500 mx-auto mb-6"></div>
+      <p class="text-lg text-gray-600">Get in touch with our team for more information or assistance.</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+      {contacts.map(contact => (
+        <div class="bg-gray-50 rounded-lg p-6 flex flex-col items-center text-center hover:shadow-md transition-shadow">
+          <div class="w-32 h-32 rounded-full overflow-hidden mb-4 border-4 border-primary-100">
+            <img 
+              src={contact.image} 
+              alt={contact.name}
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <h3 class="text-xl font-semibold text-primary-700 mb-1">{contact.name}</h3>
+          <p class="text-gray-600 mb-3">{contact.title}</p>
+          <a 
+            href={`mailto:${contact.email}`}
+            class="text-primary-600 hover:text-primary-800 font-medium flex items-center"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            {contact.email}
+          </a>
+        </div>
+      ))}
+    </div>
+    
+    <div class="mt-16 max-w-4xl mx-auto">
+      <div class="bg-primary-800 text-white rounded-lg p-8 text-center">
+        <h3 class="text-2xl font-bold mb-4">TAPT Webmaster Contact</h3>
+        <p class="mb-6">For website inquiries or technical support, please contact our webmaster:</p>
+        <a 
+          href="mailto:tnbus@msn.com"
+          class="inline-flex items-center text-accent-400 hover:text-accent-300"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+          tnbus@msn.com
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

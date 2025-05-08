@@ -1,0 +1,35 @@
+---
+interface DropdownItem {
+  title: string;
+  href: string;
+}
+
+interface Props {
+  title: string;
+  items: DropdownItem[];
+}
+
+const { title, items } = Astro.props;
+---
+
+<div class="relative group">
+  <button class="flex items-center px-3 py-2 text-gray-800 hover:text-primary-600 transition-colors font-medium">
+    {title}
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+    </svg>
+  </button>
+  <div class="absolute z-10 left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 transition-all opacity-0 invisible group-hover:opacity-100 group-hover:visible">
+    <div class="py-1" role="menu" aria-orientation="vertical">
+      {items.map(item => (
+        <a
+          href={item.href}
+          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary-600"
+          role="menuitem"
+        >
+          {item.title}
+        </a>
+      ))}
+    </div>
+  </div>
+</div>

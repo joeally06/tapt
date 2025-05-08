@@ -1,0 +1,159 @@
+---
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+);
+
+const { data: conference } = await supabase
+  .from('conferences')
+  .select('*')
+  .order('start_date', { ascending: true })
+  .limit(1)
+  .single();
+---
+
+<section class="py-16 bg-white">
+  <div class="container mx-auto px-4">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-3xl font-bold text-primary-800 mb-4 text-center">Conference Registration</h2>
+      <div class="w-20 h-1 bg-accent-500 mx-auto mb-8"></div>
+
+      {conference && (
+        <div class="bg-white rounded-lg shadow-md p-8">
+          <h3 class="text-2xl font-semibold mb-4">{conference.name}</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <p class="text-gray-600">Date</p>
+              <p class="font-medium">{new Date(conference.start_date).toLocaleDateString()} - {new Date(conference.end_date).toLocaleDateString()}</p>
+            </div>
+            <div>
+              <p class="text-gray-600">Location</p>
+              <p class="font-medium">{conference.location}</p>
+            </div>
+            <div>
+              <p class="text-gray-600">Price</p>
+              <p class="font-medium">${conference.price}</p>
+            </div>
+            <div>
+              <p class="text-gray-600">Available Spots</p>
+              <p class="font-medium">{conference.max_attendees} total</p>
+            </div>
+          </div>
+
+          <div class="prose max-w-none mb-8">
+            <p>{conference.description}</p>
+          </div>
+
+          <form id="registration-form" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label for="firstName" class="block text-sm font-medium text-gray-700">First Name</label>
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  required
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                />
+              </div>
+              <div>
+                <label for="lastName" class="block text-sm font-medium text-gray-700">Last Name</label>
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  required
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+              />
+            </div>
+
+            <div>
+              <label for="organization" class="block text-sm font-medium text-gray-700">School District/Organization</label>
+              <input
+                type="text"
+                id="organization"
+                name="organization"
+                required
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+              />
+            </div>
+
+            <div>
+              <label for="dietary" class="block text-sm font-medium text-gray-700">Dietary Restrictions</label>
+              <input
+                type="text"
+                id="dietary"
+                name="dietary"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+              />
+            </div>
+
+            <div class="flex items-center">
+              <input
+                type="checkbox"
+                id="terms"
+                name="terms"
+                required
+                class="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+              />
+              <label for="terms" class="ml-2 block text-sm text-gray-700">
+                I agree to the terms and conditions
+              </label>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full bg-primary-600 text-white py-3 px-6 rounded-md hover:bg-primary-700 transition-colors font-medium"
+            >
+              Register Now
+            </button>
+          </form>
+        </div>
+      )}
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('registration-form');
+  
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target as HTMLFormElement);
+    const data = Object.fromEntries(formData);
+    
+    try {
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      
+      if (response.ok) {
+        window.location.href = '/registration-success';
+      } else {
+        throw new Error('Registration failed');
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+      alert('Registration failed. Please try again.');
+    }
+  });
+</script>

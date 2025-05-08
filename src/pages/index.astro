@@ -1,0 +1,24 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import Mission from '../components/Mission.astro';
+import EventsSection from '../components/EventsSection.astro';
+import ResourcesSection from '../components/ResourcesSection.astro';
+import SponsorsSection from '../components/SponsorsSection.astro';
+import ContactSection from '../components/ContactSection.astro';
+---
+
+<Layout title="Home">
+  <Hero />
+  <Mission />
+  <EventsSection />
+  <ResourcesSection />
+  <SponsorsSection />
+  <ContactSection />
+  
+  <div class="bg-primary-700 py-4 text-center">
+    <div class="container mx-auto px-4">
+      <p class="text-white text-sm">© {new Date().getFullYear()} Tennessee Association of Pupil Transportation. All rights reserved.</p>
+    </div>
+  </div>
+</Layout>
