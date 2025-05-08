@@ -43,14 +43,12 @@ const conference = await getLatestConference();
 
             <div id="attendees-container">
               {[1, 2, 3, 4].map((num) => (
-                <div class="attendee-section border-t pt-6 first:border-t-0 first:pt-0" data-attendee={num}>
+                <div class="attendee-section border-t pt-6 first:border-t-0 first:pt-0 hidden" data-attendee={num}>
                   <div class="flex justify-between items-center mb-4">
                     <h3 class="text-lg font-medium">Attendee {num} {num === 1 ? '*' : ''}</h3>
-                    {num > 1 && (
-                      <button type="button" class="remove-attendee text-red-600 hover:text-red-800 text-sm">
-                        Remove
-                      </button>
-                    )}
+                    <button type="button" class="remove-attendee text-red-600 hover:text-red-800 text-sm">
+                      Remove
+                    </button>
                   </div>
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -81,12 +79,11 @@ const conference = await getLatestConference();
                 type="button"
                 id="add-attendee"
                 class="text-primary-600 hover:text-primary-800 text-sm font-medium"
-                disabled
               >
-                + Add Another Attendee
+                + Add Attendee
               </button>
               <div class="text-sm text-gray-600">
-                Total Attendees: <span id="attendee-count">1</span>
+                Total Attendees: <span id="attendee-count">0</span>
               </div>
             </div>
 
@@ -230,6 +227,6 @@ const conference = await getLatestConference();
     }
   });
 
-  // Initialize with first attendee
-  updateTotalAmount(1);
+  // Initialize with no attendees
+  updateTotalAmount(0);
 </script>
