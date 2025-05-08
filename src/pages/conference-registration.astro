@@ -220,8 +220,14 @@ const conference = await getLatestConference();
     hideError();
 
     const formData = new FormData(form);
+    const organization = formData.get('organization');
     const visibleAttendees = getVisibleAttendeeCount();
     
+    if (!organization) {
+      showError('Organization is required');
+      return;
+    }
+
     if (visibleAttendees === 0) {
       showError('Please add at least one attendee');
       return;
@@ -231,10 +237,26 @@ const conference = await getLatestConference();
     for (let i = 1; i <= visibleAttendees; i++) {
       const firstName = formData.get(`attendee${i}FirstName`);
       const lastName = formData.get(`attendee${i}LastName`);
-      if (firstName && lastName) {
-        attendees.push({ firstName, lastName });
+      
+      if (!firstName || !lastName) {
+        showError(`Please fill in all fields for Attendee ${i}`);
+        return;
       }
+      
+      attendees.push({ firstName, lastName });
     }
+
+    const totalAmount = parseFloat(totalAmountInput?.value || '0');
+    if (isNaN(totalAmount) || totalAmount <= 0) {
+      showError('Invalid total amount');
+      return;
+    }
+
+    const requestData = {
+      organization,
+      attendees,
+      totalAmount
+    };
 
     const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement;
     if (submitButton) {
@@ -243,23 +265,17 @@ const conference = await getLatestConference();
     }
 
     try {
-      const requestData = {
-        organization: formData.get('organization'),
-        attendees,
-        totalAmount: parseFloat(totalAmountInput?.value || '0'),
-      };
-
       const response = await fetch('/api/register', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(requestData),
+        body: JSON.stringify(requestData)
       });
 
       if (!response.ok) {
-        const responseData = await response.json();
-        throw new Error(responseData.error || 'Registration failed. Please try again.');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Registration failed');
       }
 
       window.location.href = '/registration-success';
