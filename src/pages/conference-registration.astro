@@ -220,7 +220,7 @@ const conference = await getLatestConference();
     hideError();
 
     const formData = new FormData(form);
-    const organization = formData.get('organization');
+    const organization = formData.get('organization')?.toString();
     const visibleAttendees = getVisibleAttendeeCount();
     
     if (!organization) {
@@ -235,8 +235,8 @@ const conference = await getLatestConference();
 
     const attendees = [];
     for (let i = 1; i <= visibleAttendees; i++) {
-      const firstName = formData.get(`attendee${i}FirstName`);
-      const lastName = formData.get(`attendee${i}LastName`);
+      const firstName = formData.get(`attendee${i}FirstName`)?.toString();
+      const lastName = formData.get(`attendee${i}LastName`)?.toString();
       
       if (!firstName || !lastName) {
         showError(`Please fill in all fields for Attendee ${i}`);
@@ -253,6 +253,7 @@ const conference = await getLatestConference();
     }
 
     const requestData = {
+      conferenceId: conference.id,
       organization,
       attendees,
       totalAmount
