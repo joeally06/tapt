@@ -1,17 +1,7 @@
 ---
-import { createClient } from '@supabase/supabase-js';
+import { getLatestConference } from '../lib/db';
 
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY
-);
-
-const { data: conference } = await supabase
-  .from('conferences')
-  .select('*')
-  .order('start_date', { ascending: true })
-  .limit(1)
-  .single();
+const conference = getLatestConference();
 ---
 
 <section class="py-16 bg-white">
