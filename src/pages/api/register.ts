@@ -3,13 +3,15 @@ import { createRegistration } from '../../lib/db';
 
 export const POST: APIRoute = async ({ request }) => {
   const headers = {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'Cache-Control': 'no-store'
   };
 
   try {
     let data;
     try {
-      data = await request.json();
+      const text = await request.text();
+      data = JSON.parse(text);
     } catch (e) {
       console.error('JSON parse error:', e);
       return new Response(

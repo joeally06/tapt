@@ -255,9 +255,10 @@ const conference = await getLatestConference();
         body: JSON.stringify(requestData),
       });
 
+      const responseData = await response.json();
+
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Registration failed. Please try again.');
+        throw new Error(responseData.error || 'Registration failed. Please try again.');
       }
 
       window.location.href = '/registration-success';
