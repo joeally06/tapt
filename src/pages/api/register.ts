@@ -8,37 +8,9 @@ export const POST: APIRoute = async ({ request }) => {
   };
 
   try {
-    if (!request.body) {
-      console.error('No request body provided');
-      return new Response(
-        JSON.stringify({ error: 'Request body is required' }), 
-        { status: 400, headers }
-      );
-    }
+    const data = await request.json();
+    console.log('Received registration data:', data); // Debug log
 
-    let data;
-    try {
-      const text = await request.text();
-      console.log('Raw request body:', text); // Debug log
-      
-      if (!text) {
-        console.error('Empty request body text');
-        return new Response(
-          JSON.stringify({ error: 'Empty request body' }), 
-          { status: 400, headers }
-        );
-      }
-      
-      data = JSON.parse(text);
-      console.log('Parsed request data:', data); // Debug log
-    } catch (e) {
-      console.error('JSON parse error:', e);
-      return new Response(
-        JSON.stringify({ error: 'Invalid JSON data provided' }), 
-        { status: 400, headers }
-      );
-    }
-    
     // Validate required fields
     if (!data.organization) {
       console.error('Missing organization field');
