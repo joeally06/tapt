@@ -241,28 +241,29 @@ const conference = await getLatestConference();
     }
 
     try {
+      const requestData = {
+        organization: formData.get('organization'),
+        attendees,
+        totalAmount: parseFloat(totalAmountInput?.value || '0'),
+      };
+
       const response = await fetch('/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          organization: formData.get('organization'),
-          attendees,
-          totalAmount: parseFloat(totalAmountInput?.value || '0'),
-        }),
+        body: JSON.stringify(requestData),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
+        const data = await response.json();
         throw new Error(data.error || 'Registration failed. Please try again.');
       }
 
       window.location.href = '/registration-success';
     } catch (error) {
       console.error('Registration error:', error);
-      showError(error.message || 'Registration failed. Please try again.');
+      showError(error instanceof Error ? error.message : 'Registration failed. Please try again.');
       
       if (submitButton) {
         submitButton.disabled = false;

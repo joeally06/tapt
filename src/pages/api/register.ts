@@ -11,6 +11,7 @@ export const POST: APIRoute = async ({ request }) => {
     try {
       data = await request.json();
     } catch (e) {
+      console.error('JSON parse error:', e);
       return new Response(
         JSON.stringify({ error: 'Invalid JSON data provided' }), 
         { status: 400, headers }
@@ -25,7 +26,7 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    if (!data.attendees || !data.attendees.length) {
+    if (!data.attendees || !Array.isArray(data.attendees) || data.attendees.length === 0) {
       return new Response(
         JSON.stringify({ error: 'At least one attendee is required' }), 
         { status: 400, headers }
@@ -34,12 +35,26 @@ export const POST: APIRoute = async ({ request }) => {
 
     // Validate each attendee has required fields
     for (const attendee of data.attendees) {
+      if (!attendee || typeof attendee !== 'object') {
+        return new Response(
+          JSON.stringify({ error: 'Invalid attendee data format' }), 
+          { status: 400, headers }
+        );
+      }
+
       if (!attendee.firstName || !attendee.lastName) {
         return new Response(
           JSON.stringify({ error: 'First name and last name are required for all attendees' }), 
           { status: 400, headers }
         );
       }
+    }
+
+    if (typeof data.totalAmount !== 'number' || data.totalAmount <= 0) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid total amount' }), 
+        { status: 400, headers }
+      );
     }
 
     const registration = await createRegistration(data);
