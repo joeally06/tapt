@@ -145,6 +145,7 @@ const conference = await getLatestConference();
     if (errorMessageDiv) {
       errorMessageDiv.textContent = message;
       errorMessageDiv.classList.remove('hidden');
+      errorMessageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }
 
@@ -154,7 +155,7 @@ const conference = await getLatestConference();
     }
   }
 
-  function updateTotalAmount(attendeeCount) {
+  function updateTotalAmount(attendeeCount: number) {
     const total = attendeeCount * PRICE_PER_ATTENDEE;
     if (totalAmountInput) {
       totalAmountInput.value = total.toFixed(2);
@@ -176,6 +177,13 @@ const conference = await getLatestConference();
 
   function getVisibleAttendeeCount() {
     return document.querySelectorAll('.attendee-section:not(.hidden)').length;
+  }
+
+  // Show first attendee section by default
+  const firstAttendeeSection = document.querySelector('.attendee-section');
+  if (firstAttendeeSection) {
+    firstAttendeeSection.classList.remove('hidden');
+    updateTotalAmount(1);
   }
 
   // Handle removing attendees
@@ -226,6 +234,12 @@ const conference = await getLatestConference();
       }
     }
 
+    const submitButton = form.querySelector('button[type="submit"]');
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = 'Submitting...';
+    }
+
     try {
       const response = await fetch('/api/register', {
         method: 'POST',
@@ -241,17 +255,19 @@ const conference = await getLatestConference();
 
       const data = await response.json();
 
-      if (response.ok) {
-        window.location.href = '/registration-success';
-      } else {
+      if (!response.ok) {
         throw new Error(data.error || 'Registration failed. Please try again.');
       }
+
+      window.location.href = '/registration-success';
     } catch (error) {
       console.error('Registration error:', error);
       showError(error.message || 'Registration failed. Please try again.');
+      
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Submit Registration';
+      }
     }
   });
-
-  // Initialize with no attendees
-  updateTotalAmount(0);
 </script>
