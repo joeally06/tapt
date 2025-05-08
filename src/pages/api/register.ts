@@ -8,10 +8,37 @@ export const POST: APIRoute = async ({ request }) => {
   };
 
   try {
-    const data = await request.json();
-    console.log('Received registration data:', data); // Debug log
+    // Validate that we have a request body before trying to parse it
+    const contentLength = request.headers.get('content-length');
+    if (!contentLength || parseInt(contentLength) === 0) {
+      console.error('Empty request body received');
+      return new Response(
+        JSON.stringify({ error: 'Empty request body' }), 
+        { status: 400, headers }
+      );
+    }
+
+    let data;
+    try {
+      data = await request.json();
+      console.log('Successfully parsed request body:', data);
+    } catch (parseError) {
+      console.error('Failed to parse request body:', parseError);
+      return new Response(
+        JSON.stringify({ error: 'Invalid JSON in request body' }), 
+        { status: 400, headers }
+      );
+    }
 
     // Validate required fields
+    if (!data || typeof data !== 'object') {
+      console.error('Invalid data format received:', data);
+      return new Response(
+        JSON.stringify({ error: 'Invalid request format' }), 
+        { status: 400, headers }
+      );
+    }
+
     if (!data.organization) {
       console.error('Missing organization field');
       return new Response(
@@ -55,20 +82,32 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    console.log('Processing registration with data:', data); // Debug log
+    console.log('Processing registration with data:', data);
     const registration = await createRegistration(data);
-    console.log('Registration created:', registration); // Debug log
+    
+    if (!registration) {
+      console.error('Registration creation failed - no data returned');
+      return new Response(
+        JSON.stringify({ error: 'Failed to create registration' }), 
+        { status: 500, headers }
+      );
+    }
 
+    console.log('Registration created successfully:', registration);
     return new Response(
       JSON.stringify({ success: true, data: registration }), 
       { status: 200, headers }
     );
+
   } catch (error) {
     console.error('Registration error:', error);
     
+    // Ensure we always return a valid JSON response even for unexpected errors
+    const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred during registration';
     return new Response(
       JSON.stringify({ 
-        error: error instanceof Error ? error.message : 'An unexpected error occurred during registration' 
+        error: errorMessage,
+        success: false
       }), 
       { status: 500, headers }
     );
