@@ -1,0 +1,327 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const advisoryMembers = [
+  {
+    name: "Ricky Phillips",
+    title: "TAPT Advisory Board",
+    role: "Vehicle Maintenance Manager",
+    organization: "Montgomery County Schools",
+    address: "621 Garcey Avenue",
+    city: "Clarksville",
+    state: "TN",
+    zip: "37040",
+    contact: {
+      office: "931-358-4214",
+      email: "ricky.phillips@cmcss.net"
+    },
+    image: "/images/advisory/phillips-ricky.jpg",
+    notes: "Montgomery County is a school board owned transportation system.",
+    website: "https://www.cmcss.net/operations/employees/"
+  },
+  {
+    name: "Elizabeth Kong",
+    title: "Assistant Student Transportation",
+    role: "Driver Safety Manager",
+    organization: "Clarksville/Montgomery County",
+    contact: {
+      office: "931-358-4216",
+      email: "elizabeth.kong@cmcss.net"
+    },
+    image: "/images/advisory/kong-elizabeth.jpg",
+    notes: "Montgomery County is a school board owned transportation system.",
+    website: "https://www.cmcss.net/operations/employees/"
+  },
+  {
+    name: "Ryan Dillingham",
+    title: "Director of Transportation",
+    organization: "Knox County Schools",
+    address: "Andrew Johnson Building\n4th Floor\n912 Gay Street",
+    city: "Knoxville",
+    state: "TN",
+    zip: "37902",
+    contact: {
+      office: "865-594-1532",
+      cell: "865-385-2401",
+      email: "ryan.dillingham@knoxschools.org"
+    },
+    image: "/images/advisory/dillingham-ryan.jpg",
+    notes: "Knox County is a Private Contractor Transportation System",
+    website: "https://www.knoxschools.org/Page/21470"
+  },
+  {
+    name: "Melissa Garton",
+    title: "Transportation Coordinator",
+    organization: "Dickson County Schools",
+    address: "113 Sylvis Rd",
+    city: "Dickson",
+    state: "TN",
+    zip: "37055",
+    contact: {
+      office: "615-740-5970"
+    },
+    image: "/images/advisory/garton-melissa.jpg",
+    notes: "Dickson County is a school board owned transportation System",
+    website: "https://www.dcstn.org/Transportation.aspx"
+  },
+  {
+    name: "Anthony Cook",
+    title: "Pupil Transportation",
+    organization: "Metro-Nashville Schools",
+    contact: {
+      cell: "615-305-4047"
+    },
+    image: "/images/advisory/cook-anthony.jpg",
+    website: "https://www.mnps.org/students-families/services/transportation"
+  },
+  {
+    name: "Dewayne Ferrell",
+    title: "Pupil Transportation",
+    organization: "Metro-Nashville Schools",
+    contact: {
+      cell: "615-305-4047"
+    },
+    image: "/images/advisory/ferrell-dewayne.jpg",
+    website: "https://www.mnps.org/students-families/services/transportation"
+  },
+  {
+    name: "Ray Robinson",
+    title: "TAPT Advisory Board",
+    image: "/images/advisory/robinson-ray.png"
+  },
+  {
+    name: "Trish Robinson",
+    title: "TAPT Advisory Board",
+    image: "/images/advisory/robinson-trish.png"
+  }
+];
+
+const industryMembers = [
+  {
+    name: "Ashley Scurlok",
+    title: "Sales Rep. IC Bus",
+    organization: "Cumberland International Trucks",
+    email: "AScurlock@CLTTE.com"
+  },
+  {
+    representatives: [
+      {
+        name: "Chuck LaLance",
+        email: "clalance@thebuscenter.com"
+      },
+      {
+        name: "Steve Benefield",
+        email: "sbenefield@thebuscenter.com"
+      },
+      {
+        name: "Barron McGinnis",
+        email: "bmcginnis@thebuscenter.com"
+      }
+    ],
+    organization: "Mid-South Bus Center",
+    location: "Murfreesboro, TN",
+    logo: "/images/advisory/bus-center-logo.jpg"
+  },
+  {
+    representatives: [
+      {
+        name: "Chuck Harville"
+      },
+      {
+        name: "Paula Rieger",
+        email: "prieger@centralstatesbus.com"
+      }
+    ],
+    title: "Sales Rep. Blue Bird Bus",
+    organization: "Central States Bus Sales",
+    logo: "/images/advisory/central-states-logo.jpg"
+  }
+];
+---
+
+<Layout title="Advisory Board">
+  <div class="py-12 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-12">
+          <img 
+            src="/images/advisory/header.jpg"
+            alt="TAPT Advisory Board Header"
+            class="w-full max-w-sm mx-auto mb-8 rounded-lg shadow-md"
+          />
+          <h1 class="text-3xl font-bold text-primary-800 mb-4">2025-2026 TAPT Advisory Board</h1>
+          <div class="w-20 h-1 bg-accent-500 mx-auto mb-6"></div>
+        </div>
+
+        <!-- Advisory Board Members -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          {advisoryMembers.map(member => (
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+              <div class="relative pt-[100%]">
+                <img 
+                  src={member.image} 
+                  alt={member.name}
+                  class="absolute inset-0 w-full h-full object-cover"
+                />
+              </div>
+              <div class="p-4">
+                <h2 class="text-xl font-bold text-primary-700 mb-1">{member.name}</h2>
+                <p class="text-lg font-semibold text-primary-600 mb-2">{member.title}</p>
+                {member.role && (
+                  <p class="text-gray-700 mb-1">{member.role}</p>
+                )}
+                {member.organization && (
+                  <p class="text-gray-700 mb-2">{member.organization}</p>
+                )}
+                
+                {member.address && (
+                  <div class="text-sm text-gray-600 mb-3">
+                    {member.address.split('\n').map(line => (
+                      <p>{line}</p>
+                    ))}
+                    {member.city && (
+                      <p>{member.city}, {member.state} {member.zip}</p>
+                    )}
+                  </div>
+                )}
+
+                {member.contact && (
+                  <div class="space-y-1 mb-3">
+                    {member.contact.office && (
+                      <p class="text-sm">
+                        <span class="font-medium">Office:</span> {member.contact.office}
+                      </p>
+                    )}
+                    {member.contact.cell && (
+                      <p class="text-sm">
+                        <span class="font-medium">Cell:</span> {member.contact.cell}
+                      </p>
+                    )}
+                    {member.contact.email && (
+                      <a 
+                        href={`mailto:${member.contact.email}`}
+                        class="text-sm text-primary-600 hover:text-primary-800 block"
+                      >
+                        {member.contact.email}
+                      </a>
+                    )}
+                  </div>
+                )}
+
+                {member.notes && (
+                  <p class="text-sm text-gray-600 italic mb-3">{member.notes}</p>
+                )}
+
+                {member.website && (
+                  <a 
+                    href={member.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center text-sm text-primary-600 hover:text-primary-800"
+                  >
+                    Visit Website
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
+                      <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+                    </svg>
+                  </a>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- State Government Section -->
+        <div class="bg-white rounded-lg shadow-md p-8 mb-12">
+          <h2 class="text-2xl font-bold text-primary-800 mb-6 text-center">Tennessee State Government Student Transportation Officials</h2>
+          <p class="text-center text-gray-600 mb-8">Ex Officio Members of the TAPT Board (Non-Voting)</p>
+          
+          <div class="flex flex-wrap justify-center gap-8">
+            <a 
+              href="https://www.tn.gov/safety/tnhp/cvemain/pupiltransport.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="block"
+            >
+              <img 
+                src="/images/advisory/dos-logo.jpg"
+                alt="Department of Safety Logo"
+                class="h-24 object-contain"
+              />
+            </a>
+            <a 
+              href="https://www.tn.gov/education/districts/health-and-safety/school-safety/transportation.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="block"
+            >
+              <img 
+                src="/images/advisory/state-board-logo.png"
+                alt="TN State Board Logo"
+                class="h-24 object-contain"
+              />
+            </a>
+          </div>
+        </div>
+
+        <!-- Industry Members -->
+        <div class="bg-white rounded-lg shadow-md p-8">
+          <h2 class="text-2xl font-bold text-primary-800 mb-6 text-center">TAPT Industry Members</h2>
+          
+          <div class="space-y-8">
+            {industryMembers.map(member => (
+              <div class="border-b border-gray-200 last:border-b-0 pb-8 last:pb-0">
+                {member.logo && (
+                  <img 
+                    src={member.logo}
+                    alt={`${member.organization} Logo`}
+                    class="h-24 object-contain mx-auto mb-4"
+                  />
+                )}
+                
+                <div class="text-center">
+                  {member.name && (
+                    <h3 class="text-xl font-semibold text-primary-700 mb-2">{member.name}</h3>
+                  )}
+                  {member.title && (
+                    <p class="text-gray-700 mb-1">{member.title}</p>
+                  )}
+                  <p class="text-gray-700 mb-2">{member.organization}</p>
+                  {member.location && (
+                    <p class="text-gray-600 mb-2">{member.location}</p>
+                  )}
+                  {member.email && (
+                    <a 
+                      href={`mailto:${member.email}`}
+                      class="text-primary-600 hover:text-primary-800"
+                    >
+                      {member.email}
+                    </a>
+                  )}
+                  
+                  {member.representatives && (
+                    <div class="mt-4 space-y-2">
+                      {member.representatives.map(rep => (
+                        <div>
+                          <p class="font-medium text-gray-800">{rep.name}</p>
+                          {rep.email && (
+                            <a 
+                              href={`mailto:${rep.email}`}
+                              class="text-primary-600 hover:text-primary-800 text-sm"
+                            >
+                              {rep.email}
+                            </a>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
