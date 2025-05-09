@@ -45,7 +45,7 @@ const resources = [
   {
     title: "Student Scholarship Application",
     description: "Apply for the TAPT student scholarship program.",
-    link: "https://form.jotform.com/240316328016952",
+    link: "/scholarship",
     icon: "scholarship"
   }
 ];
@@ -79,8 +79,8 @@ const getIcon = (iconName) => {
       {resources.map(resource => (
         <a 
           href={resource.link}
-          target="_blank"
-          rel="noopener"
+          target={resource.link.startsWith('http') ? "_blank" : undefined}
+          rel={resource.link.startsWith('http') ? "noopener" : undefined}
           class="group bg-white border border-gray-200 hover:border-primary-300 rounded-lg p-6 transition-all hover:shadow-md"
         >
           <div class="mb-4 text-primary-600 group-hover:text-primary-700">

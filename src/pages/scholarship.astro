@@ -1,0 +1,541 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const months = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'
+];
+
+const days = Array.from({ length: 31 }, (_, i) => i + 1);
+const years = Array.from({ length: 106 }, (_, i) => 2025 - i);
+
+const majors = [
+  'Accounting (AS Degree)',
+  'Aerospace Technology (AAS Degree)',
+  'Agricultural Science (AS Degree)',
+  'Air Conditioning/Refrigeration (AAS Degree)',
+  'Applied Technology (AAS Degree)',
+  'Art (AS Degree)',
+  'Automation/Robotics (AAS Degree)',
+  'Biological Science (AS Degree)',
+  'Business (AS Degree)',
+  'Business Administration (AAS Degree)',
+  'Chemistry (AS Degree)',
+  'Child Development (AAS Degree)',
+  'Child Development (AS Degree)',
+  'Clinical Laboratory Technology (AAS Degree)',
+  'Computer Graphics (AAS Degree)',
+  'Computer Information Systems (AAS Degree)',
+  'Computer Information Systems (AS Degree)',
+  'Criminal Justice (AS Degree)',
+  'Dental Assisting (AAS Degree)',
+  'Design Drafting Technology (AAS Degree)',
+  'Electrical Technology (AAS Degree)',
+  'Elementary Teacher Education (AS Degree)',
+  'Emergency Medical Services (AAS Degree)',
+  'English (AA Degree)',
+  'Fire Services Management (AS Degree)',
+  'General Education (AS Degree)',
+  'Health & Physical Education (AS Degree)',
+  'Industrial Maintenance (AAS Degree)',
+  'Law/Pre-Law (AA Degree)',
+  'Machine Tool Technology (AAS Degree)',
+  'Mathematics (AS Degree)',
+  'Medicine/Pre-Medicine or Pre-Dentistry (AS Degree)',
+  'Medicine/Pre-Veterinary Medicine (AS Degree)',
+  'Missile and Munitions Technology (AAS Degree)',
+  'Music Education (AS Degree)',
+  'Music Industry Communications (AAS Degree)',
+  'Nursing/ADN (AAS Degree)',
+  'Nursing/Pre-Nursing (AS Degree)',
+  'Paramedic (AAS Degree)',
+  'Pharmacy/Pre-Pharmacy (AS Degree)',
+  'Photography and Film Communications (AS Degree)',
+  'Physical Therapist Assistant (AAS Degree)',
+  'Pre-Engineering (AS Degree)',
+  'Process Technology (AAS Degree)',
+  'Renewable Energy',
+  'Secondary Teacher Education (AS Degree)',
+  'Theater Arts (AS Degree)',
+  'Undecided'
+];
+---
+
+<Layout title="Scholarship Application">
+  <div class="min-h-screen py-12 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="max-w-3xl mx-auto">
+        <div class="bg-white rounded-lg shadow-md p-8">
+          <div class="text-center mb-8">
+            <img 
+              src="https://www.jotform.com/uploads/leriggsbee/form_files/C_4_1055177109_tennessee%20copy%20copy.65bc06fecf6a93.55737985.jpg"
+              alt="2025 TAPT Scholarship Application Form Logo"
+              class="mx-auto max-w-sm mb-6"
+            />
+            <h1 class="text-3xl font-bold text-primary-800 mb-4">2025 Scholarship Application Form</h1>
+            <div class="w-20 h-1 bg-accent-500 mx-auto mb-6"></div>
+            <p class="text-lg text-gray-600">Application Deadline - May 15, 2025</p>
+          </div>
+
+          <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8">
+            <p class="text-sm text-yellow-800">
+              Please complete all fields. Winners will be notified on or before April 30, 2025. Any scholarship payments will be made directly to the institution upon proper confirmation of student enrollment.
+            </p>
+            <p class="text-sm text-yellow-800 mt-2">
+              If selected, you will be asked for documentation to support the data you provide. All correspondence and award agreements will be generated from the personal information submitted below.
+            </p>
+          </div>
+
+          <form id="scholarship-form" class="space-y-8">
+            <!-- I. Personal Data -->
+            <section>
+              <h2 class="text-xl font-semibold text-primary-700 mb-4">I. Personal Data</h2>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">First Name *</label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Last Name *</label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Birth Month *</label>
+                  <select
+                    name="birthMonth"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  >
+                    <option value="">Select Month</option>
+                    {months.map(month => (
+                      <option value={month}>{month}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Birth Day *</label>
+                  <select
+                    name="birthDay"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  >
+                    <option value="">Select Day</option>
+                    {days.map(day => (
+                      <option value={day}>{day}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Birth Year *</label>
+                  <select
+                    name="birthYear"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  >
+                    <option value="">Select Year</option>
+                    {years.map(year => (
+                      <option value={year}>{year}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Mobile No *</label>
+                  <input
+                    type="tel"
+                    name="mobile"
+                    required
+                    pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                    placeholder="123-456-7890"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                </div>
+              </div>
+
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Street Address *</label>
+                  <input
+                    type="text"
+                    name="address1"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Street Address Line 2</label>
+                  <input
+                    type="text"
+                    name="address2"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">City *</label>
+                    <input
+                      type="text"
+                      name="city"
+                      required
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">ZIP Code *</label>
+                    <input
+                      type="text"
+                      name="zipCode"
+                      required
+                      pattern="[0-9]{5}"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    />
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Optional Information -->
+            <section>
+              <h2 class="text-xl font-semibold text-primary-700 mb-4">Optional Information</h2>
+              <p class="text-sm text-gray-600 mb-4">
+                Information regarding gender, ethnic origin and race are optional. The information is requested for post-scholarship report generation only and in no way affects your selection for college scholarship awards.
+              </p>
+
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Gender</label>
+                  <div class="space-x-4">
+                    <label class="inline-flex items-center">
+                      <input type="radio" name="gender" value="male" class="text-primary-600 focus:ring-primary-500" />
+                      <span class="ml-2">Male</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                      <input type="radio" name="gender" value="female" class="text-primary-600 focus:ring-primary-500" />
+                      <span class="ml-2">Female</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Are you a US citizen?</label>
+                  <div class="space-x-4">
+                    <label class="inline-flex items-center">
+                      <input type="radio" name="usCitizen" value="yes" class="text-primary-600 focus:ring-primary-500" />
+                      <span class="ml-2">Yes</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                      <input type="radio" name="usCitizen" value="no" class="text-primary-600 focus:ring-primary-500" />
+                      <span class="ml-2">No</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Current Status</label>
+                  <select
+                    name="currentStatus"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  >
+                    <option value="">Select your status</option>
+                    <option value="graduate2025">I will graduate in May 2025</option>
+                    <option value="incomingFreshman">I will be an incoming freshman graduating high school prior to 2025</option>
+                    <option value="less32Hours">I have attended college but have less than 32 college credit hours</option>
+                    <option value="more32Hours">I have attended college but have at least 32 or more college credit hours</option>
+                    <option value="gedNoCollege">I am a GED graduate with no college credit hours</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Are you a first generation college student?</label>
+                  <div class="space-x-4">
+                    <label class="inline-flex items-center">
+                      <input type="radio" name="firstGen" value="yes" class="text-primary-600 focus:ring-primary-500" />
+                      <span class="ml-2">Yes, I am the first among my parents or grandparents to attend college</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                      <input type="radio" name="firstGen" value="no" class="text-primary-600 focus:ring-primary-500" />
+                      <span class="ml-2">No, either my parents or grandparents have attended college</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Major Area of Study</label>
+                  <select
+                    name="major"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  >
+                    <option value="">Please Select</option>
+                    {majors.map(major => (
+                      <option value={major}>{major}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">What is your career objective?</label>
+                  <textarea
+                    name="careerObjective"
+                    maxlength="300"
+                    rows="4"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  ></textarea>
+                  <p class="text-sm text-gray-500 mt-1">
+                    <span id="careerObjectiveCount">0</span>/300 characters
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            <!-- High School Information -->
+            <section>
+              <h2 class="text-xl font-semibold text-primary-700 mb-4">II. High School Information</h2>
+              
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Are you or will you be a May 2025 high school graduate? *</label>
+                  <div class="space-x-4">
+                    <label class="inline-flex items-center">
+                      <input type="radio" name="may2025Graduate" value="yes" required class="text-primary-600 focus:ring-primary-500" />
+                      <span class="ml-2">Yes</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                      <input type="radio" name="may2025Graduate" value="no" required class="text-primary-600 focus:ring-primary-500" />
+                      <span class="ml-2">No</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">High School Attended *</label>
+                  <input
+                    type="text"
+                    name="highSchool"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Name of School District *</label>
+                  <input
+                    type="text"
+                    name="schoolDistrict"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Year of High School Graduation or GED *</label>
+                  <input
+                    type="number"
+                    name="graduationYear"
+                    required
+                    min="1980"
+                    max="2025"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Most recent cumulative GPA</label>
+                  <input
+                    type="number"
+                    name="gpa"
+                    step="0.01"
+                    min="0"
+                    max="4"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">High School activities, community activities, volunteer work, honors, offices held</label>
+                  <textarea
+                    name="activities"
+                    rows="4"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  ></textarea>
+                </div>
+              </div>
+            </section>
+
+            <!-- ACT Information -->
+            <section>
+              <h2 class="text-xl font-semibold text-primary-700 mb-4">III. ACT Information</h2>
+              <p class="text-sm text-gray-600 mb-4">
+                ACT scores are not required for scholarship eligibility. However, providing an ACT score can increase the likelihood of your selection as compared to other candidates.
+              </p>
+
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Year you took the ACT</label>
+                  <input
+                    type="number"
+                    name="actYear"
+                    min="2020"
+                    max="2025"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">ACT composite (overall) score</label>
+                  <input
+                    type="number"
+                    name="actScore"
+                    min="1"
+                    max="36"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                </div>
+              </div>
+            </section>
+
+            <!-- Essay -->
+            <section>
+              <h2 class="text-xl font-semibold text-primary-700 mb-4">IV. Essay</h2>
+              <p class="text-sm text-gray-600 mb-4">
+                Your essay should be 300-500 words. You should address in your essay: your college goals and choice of major, what you intend to do with your education, and why a scholarship is important to you. Include any academic and non-academic accomplishments, personal characteristics, or experiences that make you uniquely worthy of scholarship consideration.
+              </p>
+
+              <div>
+                <textarea
+                  name="essay"
+                  rows="8"
+                  maxlength="500"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                ></textarea>
+                <p class="text-sm text-gray-500 mt-1">
+                  <span id="essayCount">0</span>/500 characters
+                </p>
+              </div>
+            </section>
+
+            <!-- E-Signature -->
+            <section>
+              <h2 class="text-xl font-semibold text-primary-700 mb-4">V. Applicant's E-Signature</h2>
+              <p class="text-sm text-gray-600 mb-4">
+                By signing below, you are certifying that all information is correct and that you are the person completing this application.
+              </p>
+
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Signature *</label>
+                  <input
+                    type="text"
+                    name="signature"
+                    required
+                    placeholder="Type your full name"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                </div>
+
+                <div class="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="certify"
+                    name="certify"
+                    required
+                    class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                  />
+                  <label for="certify" class="ml-2 block text-sm text-gray-700">
+                    I certify that all information provided is accurate and complete
+                  </label>
+                </div>
+              </div>
+            </section>
+
+            <div class="bg-gray-50 p-4 rounded-md">
+              <p class="text-sm text-gray-600">
+                TAPT is committed to equal opportunity in employment and education, and does not discriminate in any program or activity on the basis of race, color, religion, gender, age, national origin, disability, marital status, or any other protected class.
+              </p>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full bg-primary-600 text-white py-3 px-6 rounded-md hover:bg-primary-700 transition-colors font-medium"
+            >
+              Submit Application
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const form = document.getElementById('scholarship-form') as HTMLFormElement;
+  const careerObjective = form?.querySelector('[name="careerObjective"]') as HTMLTextAreaElement;
+  const careerObjectiveCount = document.getElementById('careerObjectiveCount');
+  const essay = form?.querySelector('[name="essay"]') as HTMLTextAreaElement;
+  const essayCount = document.getElementById('essayCount');
+
+  function updateCharCount(textarea: HTMLTextAreaElement, counter: HTMLElement | null) {
+    if (counter) {
+      counter.textContent = textarea.value.length.toString();
+    }
+  }
+
+  careerObjective?.addEventListener('input', () => {
+    updateCharCount(careerObjective, careerObjectiveCount);
+  });
+
+  essay?.addEventListener('input', () => {
+    updateCharCount(essay, essayCount);
+  });
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData);
+
+    try {
+      const response = await fetch('/api/scholarship/apply', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Application submission failed');
+      }
+
+      window.location.href = '/scholarship/success';
+    } catch (error) {
+      console.error('Application error:', error);
+      alert('Failed to submit application. Please try again.');
+    }
+  });
+</script>
