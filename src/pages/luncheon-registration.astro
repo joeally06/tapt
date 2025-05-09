@@ -1,0 +1,210 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const locations = [
+  {
+    date: "April 25, 2025",
+    time: "10:30 AM",
+    location: "Logan's Roadhouse",
+    city: "Cookeville",
+    address: "1395 Interstate Dr, Cookeville, TN 38501"
+  },
+  {
+    date: "May 1, 2025",
+    time: "10:00 AM",
+    location: "Greene Technical Center",
+    city: "Greeneville",
+    address: "1121 Hal Henard Rd, Greeneville, TN 37743",
+    notes: "Catered by Top Choice BBQ"
+  },
+  {
+    date: "May 2, 2025",
+    time: "10:00 AM",
+    location: "Calhoun's at the Marina",
+    city: "Lenoir City",
+    address: "4550 City Park Dr, Lenoir City, TN 37772"
+  }
+];
+
+const roles = [
+  "Director",
+  "Supervisor",
+  "Trainer",
+  "Mechanic",
+  "Office Staff"
+];
+---
+
+<Layout title="Luncheon Registration">
+  <div class="min-h-screen py-12 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="max-w-2xl mx-auto">
+        <div class="bg-white rounded-lg shadow-md p-8">
+          <div class="text-center mb-8">
+            <img 
+              src="https://www.jotform.com/uploads/leriggsbee/form_files/Lunch-Learn-20202020.639e4097819fa6.34285591.png"
+              alt="2025 TAPT Regional Sponsored Luncheon"
+              class="mx-auto max-w-sm mb-6"
+            />
+            <h1 class="text-3xl font-bold text-primary-800 mb-4">2025 TAPT Regional Sponsored Luncheon</h1>
+            <div class="w-20 h-1 bg-accent-500 mx-auto mb-6"></div>
+            <p class="text-gray-600">
+              The Luncheon is free to transportation department personnel, but you must register so that we will have a correct food count! The approximate luncheon time is 10:00 AM - 1:00 PM Local Time.
+            </p>
+          </div>
+
+          <form id="registration-form" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">First Name *</label>
+                <input
+                  type="text"
+                  name="firstName"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Last Name *</label>
+                <input
+                  type="text"
+                  name="lastName"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Job Title *</label>
+              <select 
+                name="jobTitle"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              >
+                <option value="">Select your role</option>
+                {roles.map(role => (
+                  <option value={role}>{role}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">School District *</label>
+              <input
+                type="text"
+                name="district"
+                required
+                placeholder="Your School System"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Transportation Department Location *</label>
+              <input
+                type="text"
+                name="departmentLocation"
+                required
+                placeholder="Name of your Transportation Department Location"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+              <input
+                type="email"
+                name="email"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number *</label>
+              <input
+                type="tel"
+                name="phone"
+                required
+                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                placeholder="123-456-7890"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Number of People in Your Group *</label>
+              <input
+                type="number"
+                name="groupSize"
+                required
+                min="1"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Select a Location *</label>
+              <select 
+                name="location"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              >
+                <option value="">Select a location</option>
+                {locations.map(loc => (
+                  <option value={`${loc.city}-${loc.location}`}>
+                    {loc.date} - {loc.location}, {loc.city}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-4">
+              <p class="text-sm text-blue-800">
+                The Lunch & Learn Events are free to Tennessee Pupil Transportation employees and open to Tennessee Pupil Transportation Supervisors & Office Staff.
+              </p>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full bg-primary-600 text-white py-3 px-6 rounded-md hover:bg-primary-700 transition-colors font-medium"
+            >
+              Submit Registration
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const form = document.getElementById('registration-form') as HTMLFormElement;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData);
+
+    try {
+      const response = await fetch('/api/luncheon/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Registration failed');
+      }
+
+      window.location.href = '/luncheon-registration/success';
+    } catch (error) {
+      console.error('Registration error:', error);
+      alert('Failed to submit registration. Please try again.');
+    }
+  });
+</script>
