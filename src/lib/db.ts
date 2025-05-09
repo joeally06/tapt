@@ -35,6 +35,76 @@ db.exec(`
     last_name TEXT NOT NULL,
     FOREIGN KEY (registration_id) REFERENCES registrations (id)
   );
+
+  CREATE TABLE IF NOT EXISTS luncheon_events (
+    id TEXT PRIMARY KEY,
+    date TEXT NOT NULL,
+    time TEXT NOT NULL,
+    location TEXT NOT NULL,
+    address TEXT NOT NULL,
+    max_attendees INTEGER,
+    notes TEXT
+  );
+
+  CREATE TABLE IF NOT EXISTS luncheon_registrations (
+    id TEXT PRIMARY KEY,
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
+    job_title TEXT NOT NULL,
+    district TEXT NOT NULL,
+    department_location TEXT NOT NULL,
+    email TEXT NOT NULL,
+    phone TEXT NOT NULL,
+    group_size INTEGER NOT NULL,
+    event_id TEXT NOT NULL,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (event_id) REFERENCES luncheon_events (id)
+  );
+
+  CREATE TABLE IF NOT EXISTS hall_of_fame_nominations (
+    id TEXT PRIMARY KEY,
+    supervisor_first_name TEXT NOT NULL,
+    supervisor_last_name TEXT NOT NULL,
+    supervisor_email TEXT NOT NULL,
+    district TEXT NOT NULL,
+    nominee_first_name TEXT NOT NULL,
+    nominee_last_name TEXT NOT NULL,
+    nominee_city TEXT NOT NULL,
+    years_of_service INTEGER,
+    region TEXT NOT NULL,
+    is_tapt_member BOOLEAN NOT NULL,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    status TEXT DEFAULT 'pending'
+  );
+
+  CREATE TABLE IF NOT EXISTS scholarship_applications (
+    id TEXT PRIMARY KEY,
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
+    birth_date TEXT NOT NULL,
+    email TEXT NOT NULL,
+    phone TEXT NOT NULL,
+    address TEXT NOT NULL,
+    city TEXT NOT NULL,
+    state TEXT NOT NULL,
+    zip TEXT NOT NULL,
+    gender TEXT,
+    is_us_citizen BOOLEAN,
+    current_status TEXT,
+    is_first_gen BOOLEAN,
+    major TEXT,
+    career_objective TEXT,
+    high_school TEXT NOT NULL,
+    school_district TEXT NOT NULL,
+    graduation_year INTEGER NOT NULL,
+    gpa NUMERIC,
+    activities TEXT,
+    act_year INTEGER,
+    act_score INTEGER,
+    essay TEXT NOT NULL,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    status TEXT DEFAULT 'pending'
+  );
 `);
 
 // Insert sample conference if none exists
