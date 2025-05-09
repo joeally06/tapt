@@ -166,3 +166,5 @@ export const createRegistration = (data) => {
 
   return transaction(data);
 };
+
+export { db }
