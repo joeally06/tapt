@@ -16,6 +16,11 @@ export default defineConfig({
       fs: {
         allow: ['.']
       }
+    },
+    optimizeDeps: {
+      esbuildOptions: {
+        target: 'es2022'
+      }
     }
   }
 });
