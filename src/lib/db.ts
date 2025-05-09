@@ -33,6 +33,12 @@ db.exec(`
     registration_id TEXT NOT NULL,
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL,
+    email TEXT NOT NULL,
+    phone TEXT NOT NULL,
+    address TEXT NOT NULL,
+    city TEXT NOT NULL,
+    state TEXT NOT NULL,
+    zip TEXT NOT NULL,
     FOREIGN KEY (registration_id) REFERENCES registrations (id)
   );
 
@@ -138,8 +144,8 @@ export const createRegistration = (data) => {
   `);
 
   const insertAttendee = db.prepare(`
-    INSERT INTO attendees (id, registration_id, first_name, last_name)
-    VALUES (?, ?, ?, ?)
+    INSERT INTO attendees (id, registration_id, first_name, last_name, email, phone, address, city, state, zip)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
 
   const transaction = db.transaction((data) => {
@@ -157,7 +163,13 @@ export const createRegistration = (data) => {
         attendeeId,
         registrationId,
         attendee.firstName,
-        attendee.lastName
+        attendee.lastName,
+        attendee.email,
+        attendee.phone,
+        attendee.address,
+        attendee.city,
+        attendee.state,
+        attendee.zip
       );
     });
 
