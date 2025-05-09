@@ -53,7 +53,7 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <script>
-  import { supabase } from '../lib/supabase';
+  import { authenticateUser } from '../lib/auth';
 
   const form = document.getElementById('login-form') as HTMLFormElement;
   const errorMessage = document.getElementById('error-message');
@@ -78,16 +78,15 @@ import Layout from '../layouts/Layout.astro';
     }
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
+      const user = await authenticateUser(email, password);
 
-      if (error) throw error;
-
-      if (data.user) {
-        window.location.href = '/admin';
+      if (!user) {
+        throw new Error('Invalid credentials');
       }
+
+      // Store user session
+      sessionStorage.setItem('user', JSON.stringify(user));
+      window.location.href = '/admin';
     } catch (error) {
       console.error('Login error:', error);
       if (errorMessage) {
