@@ -1,48 +1,68 @@
-# Astro Starter Kit: Basics
+# Tennessee Association of Pupil Transportation
 
-```sh
-npm create astro@latest -- --template basics
+The official website for the Tennessee Association of Pupil Transportation (TAPT), promoting safe transportation for all Tennessee school children through education, training, and advocacy.
+
+## 🚀 Features
+
+- Conference registration system
+- Regional luncheon registration
+- Hall of Fame nominations
+- Board member directory
+- Resource library
+- Administrative dashboard
+
+## 🛠️ Tech Stack
+
+- [Astro](https://astro.build) - Static site generator
+- [Tailwind CSS](https://tailwindcss.com) - Utility-first CSS framework
+- [Supabase](https://supabase.com) - Backend and authentication
+- [LibSQL](https://github.com/libsql/libsql) - Local database for development
+
+## 📦 Dependencies
+
+```json
+{
+  "dependencies": {
+    "astro": "^5.2.5",
+    "@astrojs/tailwind": "^5.1.0",
+    "@libsql/client": "^0.5.6",
+    "@supabase/supabase-js": "^2.39.7",
+    "tailwindcss": "^3.4.1"
+  }
+}
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+## 🚦 Getting Started
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
-
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
+## 📝 Available Commands
 
 | Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+| :----------------------- | :----------------------------------------------- |
+| `npm install`            | Installs dependencies                            |
+| `npm run dev`            | Starts local dev server at `localhost:4321`      |
+| `npm run build`          | Build your production site to `./dist/`          |
+| `npm run preview`        | Preview your build locally, before deploying     |
+| `npm run astro ...`      | Run CLI commands like `astro add`, `astro check` |
 
-## 👀 Want to learn more?
+## 🔐 Environment Variables
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+The following environment variables are required:
+
+```env
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+## 📄 License
+
+All rights reserved. © Tennessee Association of Pupil Transportation.
