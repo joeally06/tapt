@@ -11,6 +11,7 @@ try {
   await db.execute('BEGIN');
   transactionStarted = true;
   
+  // Create tables one at a time to better handle errors
   await db.execute(`
     CREATE TABLE IF NOT EXISTS conferences (
       id TEXT PRIMARY KEY,
@@ -21,8 +22,10 @@ try {
       description TEXT,
       price NUMERIC NOT NULL DEFAULT 0,
       max_attendees INTEGER
-    );
+    )
+  `);
 
+  await db.execute(`
     CREATE TABLE IF NOT EXISTS registrations (
       id TEXT PRIMARY KEY,
       organization TEXT NOT NULL,
@@ -31,24 +34,30 @@ try {
       conference_id TEXT NOT NULL,
       created_at TEXT DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (conference_id) REFERENCES conferences (id)
-    );
+    )
+  `);
 
+  await db.execute(`
     CREATE TABLE IF NOT EXISTS attendees (
       id TEXT PRIMARY KEY,
       registration_id TEXT NOT NULL,
       first_name TEXT NOT NULL,
       last_name TEXT NOT NULL,
       FOREIGN KEY (registration_id) REFERENCES registrations (id)
-    );
+    )
+  `);
 
+  await db.execute(`
     CREATE TABLE IF NOT EXISTS users (
       id TEXT PRIMARY KEY,
       email TEXT UNIQUE NOT NULL,
       password TEXT NOT NULL,
       role TEXT NOT NULL DEFAULT 'user',
       created_at TEXT DEFAULT CURRENT_TIMESTAMP
-    );
+    )
+  `);
 
+  await db.execute(`
     CREATE TABLE IF NOT EXISTS luncheon_events (
       id TEXT PRIMARY KEY,
       date TEXT NOT NULL,
@@ -58,8 +67,10 @@ try {
       address TEXT NOT NULL,
       max_attendees INTEGER,
       notes TEXT
-    );
+    )
+  `);
 
+  await db.execute(`
     CREATE TABLE IF NOT EXISTS luncheon_registrations (
       id TEXT PRIMARY KEY,
       first_name TEXT NOT NULL,
@@ -73,8 +84,10 @@ try {
       event_id TEXT NOT NULL,
       created_at TEXT DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (event_id) REFERENCES luncheon_events (id)
-    );
+    )
+  `);
 
+  await db.execute(`
     CREATE TABLE IF NOT EXISTS hall_of_fame_nominations (
       id TEXT PRIMARY KEY,
       supervisor_first_name TEXT NOT NULL,
@@ -89,8 +102,10 @@ try {
       is_tapt_member BOOLEAN NOT NULL,
       created_at TEXT DEFAULT CURRENT_TIMESTAMP,
       status TEXT DEFAULT 'pending'
-    );
+    )
+  `);
 
+  await db.execute(`
     CREATE TABLE IF NOT EXISTS scholarship_applications (
       id TEXT PRIMARY KEY,
       first_name TEXT NOT NULL,
@@ -118,7 +133,7 @@ try {
       essay TEXT NOT NULL,
       created_at TEXT DEFAULT CURRENT_TIMESTAMP,
       status TEXT DEFAULT 'pending'
-    );
+    )
   `);
 
   await db.execute('COMMIT');
