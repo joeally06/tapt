@@ -387,6 +387,22 @@ const states = [
     });
   }
 
+  function collectAttendeeData(section: Element) {
+    const attendeeNum = section.getAttribute('data-attendee');
+    if (!attendeeNum) return null;
+
+    return {
+      firstName: (form?.querySelector(`[name="attendee${attendeeNum}FirstName"]`) as HTMLInputElement)?.value,
+      lastName: (form?.querySelector(`[name="attendee${attendeeNum}LastName"]`) as HTMLInputElement)?.value,
+      address: (form?.querySelector(`[name="attendee${attendeeNum}Address"]`) as HTMLInputElement)?.value,
+      city: (form?.querySelector(`[name="attendee${attendeeNum}City"]`) as HTMLInputElement)?.value,
+      state: (form?.querySelector(`[name="attendee${attendeeNum}State"]`) as HTMLSelectElement)?.value,
+      zip: (form?.querySelector(`[name="attendee${attendeeNum}Zip"]`) as HTMLInputElement)?.value,
+      email: (form?.querySelector(`[name="attendee${attendeeNum}Email"]`) as HTMLInputElement)?.value,
+      phone: (form?.querySelector(`[name="attendee${attendeeNum}Phone"]`) as HTMLInputElement)?.value
+    };
+  }
+
   function printForm() {
     const printTemplate = document.getElementById('print-template');
     const printAttendeesContainer = document.getElementById('print-attendees');
@@ -406,34 +422,21 @@ const states = [
 
       // Add attendees
       visibleSections.forEach((section, index) => {
-        const attendeeNum = section.getAttribute('data-attendee');
-        const fields = [
-          { name: 'FirstName', label: 'First Name' },
-          { name: 'LastName', label: 'Last Name' },
-          { name: 'Address', label: 'Address' },
-          { name: 'City', label: 'City' },
-          { name: 'State', label: 'State' },
-          { name: 'Zip', label: 'ZIP Code' },
-          { name: 'Email', label: 'Email' },
-          { name: 'Phone', label: 'Phone' }
-        ];
+        const attendeeData = collectAttendeeData(section);
+        if (!attendeeData) return;
 
         const attendeeDiv = document.createElement('div');
         attendeeDiv.className = 'print-attendee';
-        attendeeDiv.innerHTML = `<h2 style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">Attendee ${index + 1}</h2>`;
-
-        fields.forEach(field => {
-          const input = form?.querySelector(`[name="attendee${attendeeNum}${field.name}"]`) as HTMLInputElement | HTMLSelectElement;
-          const value = input instanceof HTMLSelectElement ? 
-            input.options[input.selectedIndex].text : 
-            input.value;
-          
-          const fieldDiv = document.createElement('div');
-          fieldDiv.className = 'print-field';
-          fieldDiv.innerHTML = `<strong>${field.label}:</strong> ${value}`;
-          attendeeDiv.appendChild(fieldDiv);
-        });
-
+        attendeeDiv.innerHTML = `
+          <h2 style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">Attendee ${index + 1}</h2>
+          <div class="print-field"><strong>Name:</strong> ${attendeeData.firstName} ${attendeeData.lastName}</div>
+          <div class="print-field"><strong>Address:</strong> ${attendeeData.address}</div>
+          <div class="print-field"><strong>City:</strong> ${attendeeData.city}</div>
+          <div class="print-field"><strong>State:</strong> ${attendeeData.state}</div>
+          <div class="print-field"><strong>ZIP:</strong> ${attendeeData.zip}</div>
+          <div class="print-field"><strong>Email:</strong> ${attendeeData.email}</div>
+          <div class="print-field"><strong>Phone:</strong> ${attendeeData.phone}</div>
+        `;
         printAttendeesContainer.appendChild(attendeeDiv);
       });
     }
@@ -517,82 +520,43 @@ const states = [
     e.preventDefault();
     hideError();
 
-    const formData = new FormData(form);
-    const organization = formData.get('organization')?.toString().trim();
-    const visibleAttendees = getVisibleAttendeeCount();
+    const organization = (form.querySelector('[name="organization"]') as HTMLInputElement)?.value.trim();
+    const visibleSections = getVisibleAttendeeSections();
     
     if (!organization) {
       showError('Organization is required');
       return;
     }
 
-    if (visibleAttendees === 0) {
+    if (visibleSections.length === 0) {
       showError('Please add at least one attendee');
       return;
     }
 
     const attendees = [];
-    const visibleSections = getVisibleAttendeeSections();
-    
     for (const section of visibleSections) {
-      const attendeeNum = section.getAttribute('data-attendee');
-      const firstName = formData.get(`attendee${attendeeNum}FirstName`)?.toString().trim();
-      const lastName = formData.get(`attendee${attendeeNum}LastName`)?.toString().trim();
-      const address = formData.get(`attendee${attendeeNum}Address`)?.toString().trim();
-      const city = formData.get(`attendee${attendeeNum}City`)?.toString().trim();
-      const state = formData.get(`attendee${attendeeNum}State`)?.toString().trim();
-      const zip = formData.get(`attendee${attendeeNum}Zip`)?.toString().trim();
-      const email = formData.get(`attendee${attendeeNum}Email`)?.toString().trim();
-      const phone = formData.get(`attendee${attendeeNum}Phone`)?.toString().trim();
-      
-      if (!firstName || !lastName || !address || !city || !state || !zip || !email || !phone) {
-        showError(`Please fill in all fields for Attendee ${attendeeNum}`);
+      const attendeeData = collectAttendeeData(section);
+      if (!attendeeData) {
+        showError('Invalid attendee data');
         return;
       }
-      
-      attendees.push({ 
-        firstName, 
-        lastName,
-        address,
-        city,
-        state,
-        zip,
-        email,
-        phone
-      });
-    }
 
-    const totalAmount = visibleAttendees * PRICE_PER_ATTENDEE;
-    if (isNaN(totalAmount) || totalAmount <= 0) {
-      showError('Invalid total amount');
-      return;
-    }
-
-    let conferenceData;
-    try {
-      conferenceData = JSON.parse(form.dataset.conference || '{}');
-      if (!conferenceData.id) {
-        throw new Error('Invalid conference data');
+      const { firstName, lastName, address, city, state, zip, email, phone } = attendeeData;
+      if (!firstName || !lastName || !address || !city || !state || !zip || !email || !phone) {
+        showError('Please fill in all fields for each attendee');
+        return;
       }
-    } catch (error) {
-      console.error('Error parsing conference data:', error);
-      showError('Invalid conference data. Please refresh the page and try again.');
-      return;
+
+      attendees.push(attendeeData);
     }
+
+    const totalAmount = visibleSections.length * PRICE_PER_ATTENDEE;
 
     const requestData = {
-      conferenceId: conferenceData.id,
       organization,
       attendees,
       totalAmount
     };
-
-    // Validate request data before sending
-    if (!requestData.conferenceId || !requestData.organization || !requestData.attendees.length || !requestData.totalAmount) {
-      console.error('Invalid request data:', requestData);
-      showError('Invalid form data. Please check all fields and try again.');
-      return;
-    }
 
     const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement;
     if (submitButton) {
@@ -601,7 +565,6 @@ const states = [
     }
 
     try {
-      console.log('Sending registration data:', requestData);
       const response = await fetch('/api/register', {
         method: 'POST',
         headers: {
