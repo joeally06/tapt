@@ -498,7 +498,7 @@ const states = [
         section.classList.add('hidden');
         const inputs = section.querySelectorAll('input, select');
         inputs.forEach(input => {
-          input.value = '';
+          (input as HTMLInputElement).value = '';
           input.required = false;
           input.disabled = false;
         });
@@ -547,12 +547,17 @@ const states = [
       }
 
       const totalAmount = visibleSections.length * PRICE_PER_ATTENDEE;
+      const conferenceData = form.dataset.conference ? JSON.parse(form.dataset.conference) : null;
+
+      if (!conferenceData || !conferenceData.id) {
+        throw new Error('Conference data is missing');
+      }
 
       const requestData = {
         organization,
         attendees,
         totalAmount,
-        conferenceId: JSON.parse(form.dataset.conference || '{}').id
+        conferenceId: conferenceData.id
       };
 
       const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement;
