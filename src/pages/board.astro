@@ -1,0 +1,214 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const boardMembers = [
+  {
+    name: "Elizabeth Kong",
+    title: "2024-2025 President",
+    role: "Pupil Transportation Supervisor",
+    organization: "Montgomery County Schools",
+    location: "Clarksville, TN",
+    contact: {
+      office: "000-000-0000",
+      cell: "000-000-0000"
+    },
+    image: "https://static.wixstatic.com/media/307eed_06a9e5adb2e14e0bb1ee1ebabd19a23a~mv2.jpg",
+    website: "https://www.cmcss.net/",
+    notes: "Montgomery County is a school board owned transportation system."
+  },
+  {
+    name: "Dawn Cox",
+    title: "Director TAPT East Tennessee",
+    role: "Pupil Transportation Coordinator",
+    organization: "Loudon County Schools",
+    location: "100 River Road, Loudon, TN 37774",
+    contact: {
+      office: "865-458-5411 ex 1014",
+      cell: "865-740-4818",
+      email: "coxd@loudoncounty.org"
+    },
+    image: "https://static.wixstatic.com/media/307eed_c267cc069214426cbddeb2d6634605d8~mv2_d_1920_2689_s_2.jpg",
+    website: "https://www.loudoncounty.org/",
+    notes: "Loudon County Pupil Transportation service is outsourced to several private contractors.",
+    additionalTitle: "Chairperson of the TAPT Board",
+    term: "2023-2025"
+  },
+  {
+    name: "Andrew Grasty",
+    title: "2024-2025 TAPT Past President",
+    role: "Director of Transportation",
+    organization: "Metro-Nashville Schools",
+    image: "https://static.wixstatic.com/media/307eed_70a610800e094a688d1e27fc794af451~mv2.jpg",
+    notes: "Metro Nashville is a school board owned transportation system."
+  },
+  {
+    name: "Diane Elder",
+    title: "Director TAPT East Tennessee",
+    role: "Director of Schools",
+    organization: "Pickett County Schools",
+    location: "2141 Skyline Drive, Byrdstown, TN 38549",
+    contact: {
+      office: "931-864-3123",
+      cell: "931-510-6510",
+      email: "diane.elder@pickettk12.net"
+    },
+    image: "https://static.wixstatic.com/media/307eed_83606c8c9afb47a0a3f15a5e5077c00d~mv2.jpg",
+    website: "https://www.pickettk12.net/",
+    notes: "Pickett County is a school board owned transportation system.",
+    term: "2023-2025"
+  },
+  {
+    name: "Tracey Richardson",
+    title: "Director TAPT Middle Tennessee",
+    role: "Transportation Director",
+    organization: "Sumner County Schools",
+    location: "Larry Riggsbee Support Services Building, 1500 Airport Road, Gallatin, TN 37066",
+    contact: {
+      office: "615-452-1520"
+    },
+    image: "https://static.wixstatic.com/media/307eed_caa8a00b9b0447dfbabb9271c4907a88~mv2.jpg",
+    website: "https://sumnerschools.org/index.php/departments/transportation",
+    notes: "Sumner County is a school board owned transportation system.",
+    term: "2023-2025"
+  },
+  {
+    name: "Dewayne Ferrell",
+    title: "Director TAPT Middle Tennessee",
+    role: "Fleet Operations Manager",
+    organization: "Metro-Nashville Schools",
+    location: "336 Woodycrest Avenue, Nashville, TN 37210",
+    contact: {
+      cell: "615-456-1719",
+      email: "dewayne.ferrell@mnps.org"
+    },
+    additionalTitle: "TAPT Trade Show Coordinator",
+    notes: "Metro-Nashville is a school board owned transportation system.",
+    term: "2023-2025"
+  },
+  {
+    name: "Tim Maynard",
+    title: "Director TAPT West Tennessee",
+    role: "Transportation Supervisor",
+    organization: "Obion County Schools",
+    location: "802 C. C. Gurien Drive Suite 1, Troy, TN 38260",
+    contact: {
+      office: "731-536-4694",
+      cell: "731-225-7987",
+      email: "tmaynard@ocboe.com"
+    },
+    image: "https://static.wixstatic.com/media/307eed_124c376bdff742fa8fca5df6106ab82e~mv2.jpg",
+    website: "https://www.obioncountyschools.com/",
+    notes: "Obion County is a School Board owned Transportation System.",
+    term: "2023-2025"
+  },
+  {
+    name: "Eric Watkins",
+    title: "Director TAPT West Tennessee",
+    role: "Transportation Director",
+    organization: "Stewart County Schools",
+    location: "1031 Spring Street, Dover TN 37058",
+    contact: {
+      office: "931-232-7342",
+      cell: "931-249-4921",
+      email: "ericwatkins@stewartcountyschools.org"
+    },
+    image: "https://static.wixstatic.com/media/307eed_c6546041476a41288450b308c41eea12~mv2_d_2472_1985_s_2.jpg",
+    website: "http://stewartcountyschools.net/",
+    notes: "Stewart County is a school board owned transportation system.",
+    term: "2023-2025"
+  }
+];
+---
+
+<Layout title="Board of Directors">
+  <div class="py-12 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="max-w-3xl mx-auto text-center mb-12">
+        <img 
+          src="https://static.wixstatic.com/media/307eed_8d0f578760464bb09b51ed47b80c0411~mv2.jpg"
+          alt="TAPT Board Header"
+          class="w-full max-w-md mx-auto mb-8 rounded-lg shadow-md"
+        />
+        <h1 class="text-3xl font-bold text-primary-800 mb-4">2025-2026 TAPT Board of Directors</h1>
+        <div class="w-20 h-1 bg-accent-500 mx-auto mb-6"></div>
+        <p class="text-lg text-gray-600">Contact a board member below for TAPT organization questions or suggestions.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {boardMembers.map(member => (
+          <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            {member.image && (
+              <div class="h-64 overflow-hidden">
+                <img 
+                  src={member.image} 
+                  alt={member.name}
+                  class="w-full h-full object-cover"
+                />
+              </div>
+            )}
+            <div class="p-6">
+              <h2 class="text-xl font-bold text-primary-700 mb-1">{member.name}</h2>
+              <p class="text-lg font-semibold text-primary-600 mb-2">{member.title}</p>
+              {member.additionalTitle && (
+                <p class="text-primary-600 mb-2">{member.additionalTitle}</p>
+              )}
+              {member.term && (
+                <p class="text-sm text-gray-500 mb-4">Election Term: {member.term}</p>
+              )}
+              
+              <div class="space-y-2 mb-4">
+                <p class="text-gray-700">{member.role}</p>
+                <p class="text-gray-700">{member.organization}</p>
+                {member.location && (
+                  <p class="text-gray-600 text-sm">{member.location}</p>
+                )}
+              </div>
+
+              {member.contact && (
+                <div class="space-y-1 mb-4">
+                  {member.contact.office && (
+                    <p class="text-sm">
+                      <span class="font-medium">Office:</span> {member.contact.office}
+                    </p>
+                  )}
+                  {member.contact.cell && (
+                    <p class="text-sm">
+                      <span class="font-medium">Cell:</span> {member.contact.cell}
+                    </p>
+                  )}
+                  {member.contact.email && (
+                    <a 
+                      href={`mailto:${member.contact.email}`}
+                      class="text-sm text-primary-600 hover:text-primary-800 block"
+                    >
+                      {member.contact.email}
+                    </a>
+                  )}
+                </div>
+              )}
+
+              {member.notes && (
+                <p class="text-sm text-gray-600 italic mb-4">{member.notes}</p>
+              )}
+
+              {member.website && (
+                <a 
+                  href={member.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center text-primary-600 hover:text-primary-800"
+                >
+                  <span>Visit District Website</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
+                    <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+                  </svg>
+                </a>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</Layout>
