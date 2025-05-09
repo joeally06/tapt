@@ -387,20 +387,22 @@ const states = [
     });
   }
 
-  function collectAttendeeData(section: Element) {
+  function collectAttendeeData(section: Element): Record<string, string> | null {
     const attendeeNum = section.getAttribute('data-attendee');
     if (!attendeeNum) return null;
 
-    return {
-      firstName: (form?.querySelector(`[name="attendee${attendeeNum}FirstName"]`) as HTMLInputElement)?.value,
-      lastName: (form?.querySelector(`[name="attendee${attendeeNum}LastName"]`) as HTMLInputElement)?.value,
-      address: (form?.querySelector(`[name="attendee${attendeeNum}Address"]`) as HTMLInputElement)?.value,
-      city: (form?.querySelector(`[name="attendee${attendeeNum}City"]`) as HTMLInputElement)?.value,
-      state: (form?.querySelector(`[name="attendee${attendeeNum}State"]`) as HTMLSelectElement)?.value,
-      zip: (form?.querySelector(`[name="attendee${attendeeNum}Zip"]`) as HTMLInputElement)?.value,
-      email: (form?.querySelector(`[name="attendee${attendeeNum}Email"]`) as HTMLInputElement)?.value,
-      phone: (form?.querySelector(`[name="attendee${attendeeNum}Phone"]`) as HTMLInputElement)?.value
-    };
+    const fields = ['FirstName', 'LastName', 'Address', 'City', 'State', 'Zip', 'Email', 'Phone'];
+    const data: Record<string, string> = {};
+
+    for (const field of fields) {
+      const input = form?.querySelector(`[name="attendee${attendeeNum}${field}"]`) as HTMLInputElement | HTMLSelectElement;
+      if (!input || !input.value.trim()) {
+        return null;
+      }
+      data[field.toLowerCase()] = input.value.trim();
+    }
+
+    return data;
   }
 
   function printForm() {
@@ -429,7 +431,7 @@ const states = [
         attendeeDiv.className = 'print-attendee';
         attendeeDiv.innerHTML = `
           <h2 style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">Attendee ${index + 1}</h2>
-          <div class="print-field"><strong>Name:</strong> ${attendeeData.firstName} ${attendeeData.lastName}</div>
+          <div class="print-field"><strong>Name:</strong> ${attendeeData.firstname} ${attendeeData.lastname}</div>
           <div class="print-field"><strong>Address:</strong> ${attendeeData.address}</div>
           <div class="print-field"><strong>City:</strong> ${attendeeData.city}</div>
           <div class="print-field"><strong>State:</strong> ${attendeeData.state}</div>
@@ -520,51 +522,45 @@ const states = [
     e.preventDefault();
     hideError();
 
-    const organization = (form.querySelector('[name="organization"]') as HTMLInputElement)?.value.trim();
-    const visibleSections = getVisibleAttendeeSections();
-    
-    if (!organization) {
-      showError('Organization is required');
-      return;
-    }
-
-    if (visibleSections.length === 0) {
-      showError('Please add at least one attendee');
-      return;
-    }
-
-    const attendees = [];
-    for (const section of visibleSections) {
-      const attendeeData = collectAttendeeData(section);
-      if (!attendeeData) {
-        showError('Invalid attendee data');
-        return;
-      }
-
-      const { firstName, lastName, address, city, state, zip, email, phone } = attendeeData;
-      if (!firstName || !lastName || !address || !city || !state || !zip || !email || !phone) {
-        showError('Please fill in all fields for each attendee');
-        return;
-      }
-
-      attendees.push(attendeeData);
-    }
-
-    const totalAmount = visibleSections.length * PRICE_PER_ATTENDEE;
-
-    const requestData = {
-      organization,
-      attendees,
-      totalAmount
-    };
-
-    const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement;
-    if (submitButton) {
-      submitButton.disabled = true;
-      submitButton.textContent = 'Submitting...';
-    }
-
     try {
+      const organization = (form.querySelector('[name="organization"]') as HTMLInputElement)?.value.trim();
+      const visibleSections = getVisibleAttendeeSections();
+      
+      if (!organization) {
+        showError('Organization is required');
+        return;
+      }
+
+      if (visibleSections.length === 0) {
+        showError('Please add at least one attendee');
+        return;
+      }
+
+      const attendees = [];
+      for (const section of visibleSections) {
+        const attendeeData = collectAttendeeData(section);
+        if (!attendeeData) {
+          showError('Please fill in all required fields for each attendee');
+          return;
+        }
+        attendees.push(attendeeData);
+      }
+
+      const totalAmount = visibleSections.length * PRICE_PER_ATTENDEE;
+
+      const requestData = {
+        organization,
+        attendees,
+        totalAmount,
+        conferenceId: JSON.parse(form.dataset.conference || '{}').id
+      };
+
+      const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = 'Submitting...';
+      }
+
       const response = await fetch('/api/register', {
         method: 'POST',
         headers: {
@@ -583,6 +579,7 @@ const states = [
       console.error('Registration error:', error);
       showError(error instanceof Error ? error.message : 'Registration failed. Please try again.');
       
+      const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement;
       if (submitButton) {
         submitButton.disabled = false;
         submitButton.textContent = 'Submit Registration';
