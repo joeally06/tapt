@@ -1,0 +1,129 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const article = {
+  title: "TN School Bus Driver Hall of Fame Member Joe Baxter",
+  source: "Chattanooga TN Free Press",
+  author: "Staff writer Ben Benton",
+  content: `Joe Baxter of Franklin County, the first inductee to the state's Bus Driver Hall of Fame, poses for a picture on Friday in Winchester, Tenn. Baxter drove the same bus, number 40, for 56 years without an accident. The bus pictured is bus 91, which replaced bus 40 on Baxter's old route when the bus he drove aged beyond repair.
+
+Joe Baxter must have nerves of steel. Or maybe he's hard of hearing. Either could be an advantage if you're hauling 60 screaming grade-schoolers across a rural Tennessee county. But Baxter did it every school day for 56 years. Without an accident. And with a smile on his face.
+
+That was enough for the Tennessee Association of Pupil Transportation to name him its first state Bus Driver Hall of Fame inductee.
+
+Baxter, 82, parked his school bus -- No. 40 -- for the last time on Aug. 31, 2011. That ended his daily ritual of busing children to school each morning, returning to his farm in Winchester to work through the day, then setting off again to pick up the kids and take them home.
+
+Old No. 40 now sits in a scrap yard serving up its spare parts. Not Baxter. Nowadays he pins down a chair at Buddy's Market & Deli daily to trade jabs with his friends and 80-year-old brother, Wiley.
+
+Baxter's induction in June as the first member of the state's School Bus Driver Hall of Fame has touched him deeply and he brims with pride to talk about it. He'll be formally recognized tonight at the Franklin County school board meeting.
+
+Baxter returned home from Korea in December 1954 after driving a supply truck in the U.S. Army. He took the bus job the following summer. Driving a school bus was a perfect second job for a farmer, who can always use the money. In fact, "it took both to make a living," he said.
+
+"I didn't know whether I was going to like it or not, handling kids, you know," he said. "And I loved it, right off. It fit in my line of foolishness."
+
+The first day he drove a station wagon to carry the system's special-needs children to and from school, he said. Like a big bass on a jig in Tims Ford Lake, that set the hook.
+
+The next 56 years "went awful fast, I reckon because I liked my job so well," he said.
+
+Over six decades, Baxter drove daily routes, field trips, band trips, ball games and other events. The daily drive was not without its adventures, scary and funny.
+
+"A kid on the bus going home one afternoon shot off a firecracker," Baxter said, laughing. Apparently the young man's plan was to ignite the firework that morning but his lighter wouldn't work. That afternoon another bus rider had a lighter to lend him.
+
+"They lit that little firecracker and, of course, that made the awfulest noise you ever seen," Baxter said with a sparkle in his eyes. "He got the rest of the year off from school."
+
+Baxter well remembers one embarrassing moment that happened while he was breaking up a fight between two sisters. Baxter's stomach had been bothering him one day and he'd loosened his belt to be a little more comfortable while he drove his long rural route.
+
+"There were two girls sitting about two seats behind me and they got in a fight," he recalled. "They were sisters. I said, 'Girls, break it up.' They were in high school, arguing over this boy."
+
+Baxter pulled over and put out the school bus stop sign so he could separate them.
+
+"I forgot about loosening my belt and when I got up my britches just slid down to my knees and at the time I was wearing boxer shorts -- nothing to be seen, now. And the kids laughed."
+
+"They still talk about that. They've got families of their own and they tell their kids about it," he said.
+
+Baxter said he stuck it out through 56 years behind the wheel of a bus because "I loved my job."
+
+The trick to dodging the nerve-rattling row of a school bus is maintaining decorum.
+
+"Get them to like you. Don't scream at the kids. That's only makes them madder, I think," he said. Children behave far better on the bus with a driver they like than one they fear, he said.
+
+Larry Riggsbee, executive director of the Tennessee Association of Pupil Transportation, said the organization's board of directors was looking for a way to honor a school bus driver each year at the state convention.
+
+"We have a National School Bus Driver Hall of Fame and we just extended that to the state level," Riggsbee said.
+
+The number of years behind the wheel, resumes and recommendations went into the selection process, he said. Every Tennessee school district was eligible to nominate a bus driver, and 41 people wound up in the pool from which Baxter was chosen.
+
+Dr. Ellis Counts, Franklin County Schools Supervisor of Transportation and Safety, said that when he heard about the Hall of Fame, he knew Baxter was an obvious choice.
+
+Counts recalls seeing firsthand why Baxter was so well-loved when he had to "rescue" old No. 40 on Blue Springs Road. Ellis arrived to help out after the bus broke down and saw Baxter and his brother watching out for the children, using pet names and kindness to keep them calm.
+
+"It was obvious they loved their children and that the children loved them," he said.
+
+But after more than half a century behind the wheel, Baxter finally decided to call it quits.
+
+"It was time to go," a slightly misty Baxter said. "I had a good record behind me and I didn't want to mess it up."
+
+On Friday, Baxter showed off a photograph of him sitting in old No. 40 on his last day, and recalled his father asking why he wanted to drive a school bus and "put up with all those kids."
+
+"I told him, 'Cause I love 'em.'"`
+};
+---
+
+<Layout title={article.title}>
+  <div class="py-12 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <img 
+            src="https://static.wixstatic.com/media/11062b_d2398715eb2e43348e6907b6b3383815f000.jpg/v1/fill/w_1080,h_1080,al_c,q_85,enc_avif,quality_auto/11062b_d2398715eb2e43348e6907b6b3383815f000.jpg"
+            alt="TAPT Hall of Fame Header"
+            class="w-full h-48 object-cover"
+          />
+          
+          <div class="p-8">
+            <div class="flex justify-center mb-8">
+              <img 
+                src="https://static.wixstatic.com/media/307eed_68399fc4b1c5440e8eef7aacebc2a082~mv2.png"
+                alt="TAPT Logo"
+                class="h-32"
+              />
+            </div>
+
+            <h1 class="text-3xl font-bold text-primary-800 mb-4 text-center">{article.title}</h1>
+            
+            <div class="mb-8">
+              <img 
+                src="https://static.wixstatic.com/media/307eed_c79f082f90ac422d9dfa542f657446f0.jpg"
+                alt="Joe Baxter"
+                class="mx-auto rounded-lg shadow-md"
+              />
+            </div>
+
+            <div class="text-sm text-gray-600 mb-6">
+              <p>Source: {article.source}</p>
+              <p>By: {article.author}</p>
+            </div>
+
+            <div class="prose max-w-none">
+              {article.content.split('\n\n').map(paragraph => (
+                <p class="mb-4">{paragraph}</p>
+              ))}
+            </div>
+
+            <div class="mt-8 flex justify-center">
+              <a 
+                href="/hall-of-fame"
+                class="inline-flex items-center text-primary-600 hover:text-primary-800"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                </svg>
+                Back to Hall of Fame
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
