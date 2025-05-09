@@ -74,6 +74,69 @@ const conference = await getLatestConference();
                       />
                     </div>
                   </div>
+                  <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                    <input
+                      type="text"
+                      name={`attendee${num}Address`}
+                      required={num === 1}
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      placeholder="Street Address"
+                    />
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-2">City</label>
+                      <input
+                        type="text"
+                        name={`attendee${num}City`}
+                        required={num === 1}
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      />
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-2">State</label>
+                      <input
+                        type="text"
+                        name={`attendee${num}State`}
+                        required={num === 1}
+                        value="TN"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      />
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-2">ZIP Code</label>
+                      <input
+                        type="text"
+                        name={`attendee${num}Zip`}
+                        required={num === 1}
+                        pattern="[0-9]{5}"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      />
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                      <input
+                        type="email"
+                        name={`attendee${num}Email`}
+                        required={num === 1}
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      />
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                      <input
+                        type="tel"
+                        name={`attendee${num}Phone`}
+                        required={num === 1}
+                        pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                        placeholder="123-456-7890"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      />
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -243,13 +306,28 @@ const conference = await getLatestConference();
       const attendeeNum = section.getAttribute('data-attendee');
       const firstName = formData.get(`attendee${attendeeNum}FirstName`)?.toString().trim();
       const lastName = formData.get(`attendee${attendeeNum}LastName`)?.toString().trim();
+      const address = formData.get(`attendee${attendeeNum}Address`)?.toString().trim();
+      const city = formData.get(`attendee${attendeeNum}City`)?.toString().trim();
+      const state = formData.get(`attendee${attendeeNum}State`)?.toString().trim();
+      const zip = formData.get(`attendee${attendeeNum}Zip`)?.toString().trim();
+      const email = formData.get(`attendee${attendeeNum}Email`)?.toString().trim();
+      const phone = formData.get(`attendee${attendeeNum}Phone`)?.toString().trim();
       
-      if (!firstName || !lastName) {
+      if (!firstName || !lastName || !address || !city || !state || !zip || !email || !phone) {
         showError(`Please fill in all fields for Attendee ${attendeeNum}`);
         return;
       }
       
-      attendees.push({ firstName, lastName });
+      attendees.push({ 
+        firstName, 
+        lastName,
+        address,
+        city,
+        state,
+        zip,
+        email,
+        phone
+      });
     }
 
     const totalAmount = visibleAttendees * PRICE_PER_ATTENDEE;
