@@ -3,6 +3,59 @@ import Layout from '../layouts/Layout.astro';
 import { getLatestConference } from '../lib/db';
 
 const conference = await getLatestConference();
+
+const states = [
+  { value: 'AL', label: 'Alabama' },
+  { value: 'AK', label: 'Alaska' },
+  { value: 'AZ', label: 'Arizona' },
+  { value: 'AR', label: 'Arkansas' },
+  { value: 'CA', label: 'California' },
+  { value: 'CO', label: 'Colorado' },
+  { value: 'CT', label: 'Connecticut' },
+  { value: 'DE', label: 'Delaware' },
+  { value: 'FL', label: 'Florida' },
+  { value: 'GA', label: 'Georgia' },
+  { value: 'HI', label: 'Hawaii' },
+  { value: 'ID', label: 'Idaho' },
+  { value: 'IL', label: 'Illinois' },
+  { value: 'IN', label: 'Indiana' },
+  { value: 'IA', label: 'Iowa' },
+  { value: 'KS', label: 'Kansas' },
+  { value: 'KY', label: 'Kentucky' },
+  { value: 'LA', label: 'Louisiana' },
+  { value: 'ME', label: 'Maine' },
+  { value: 'MD', label: 'Maryland' },
+  { value: 'MA', label: 'Massachusetts' },
+  { value: 'MI', label: 'Michigan' },
+  { value: 'MN', label: 'Minnesota' },
+  { value: 'MS', label: 'Mississippi' },
+  { value: 'MO', label: 'Missouri' },
+  { value: 'MT', label: 'Montana' },
+  { value: 'NE', label: 'Nebraska' },
+  { value: 'NV', label: 'Nevada' },
+  { value: 'NH', label: 'New Hampshire' },
+  { value: 'NJ', label: 'New Jersey' },
+  { value: 'NM', label: 'New Mexico' },
+  { value: 'NY', label: 'New York' },
+  { value: 'NC', label: 'North Carolina' },
+  { value: 'ND', label: 'North Dakota' },
+  { value: 'OH', label: 'Ohio' },
+  { value: 'OK', label: 'Oklahoma' },
+  { value: 'OR', label: 'Oregon' },
+  { value: 'PA', label: 'Pennsylvania' },
+  { value: 'RI', label: 'Rhode Island' },
+  { value: 'SC', label: 'South Carolina' },
+  { value: 'SD', label: 'South Dakota' },
+  { value: 'TN', label: 'Tennessee' },
+  { value: 'TX', label: 'Texas' },
+  { value: 'UT', label: 'Utah' },
+  { value: 'VT', label: 'Vermont' },
+  { value: 'VA', label: 'Virginia' },
+  { value: 'WA', label: 'Washington' },
+  { value: 'WV', label: 'West Virginia' },
+  { value: 'WI', label: 'Wisconsin' },
+  { value: 'WY', label: 'Wyoming' }
+];
 ---
 
 <Layout title="Conference Registration">
@@ -109,13 +162,15 @@ const conference = await getLatestConference();
                       </div>
                       <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">State</label>
-                        <input
-                          type="text"
+                        <select
                           name={`attendee${num}State`}
                           required={num === 1}
-                          value="TN"
                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-                        />
+                        >
+                          {states.map(state => (
+                            <option value={state.value} selected={state.value === 'TN'}>{state.label}</option>
+                          ))}
+                        </select>
                       </div>
                       <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">ZIP Code</label>
@@ -264,8 +319,8 @@ const conference = await getLatestConference();
   function copyAddressFromFirstAttendee(targetNum: number) {
     const fields = ['Address', 'City', 'State', 'Zip'];
     fields.forEach(field => {
-      const sourceInput = form?.querySelector(`[name="attendee1${field}"]`) as HTMLInputElement;
-      const targetInput = form?.querySelector(`[name="attendee${targetNum}${field}"]`) as HTMLInputElement;
+      const sourceInput = form?.querySelector(`[name="attendee1${field}"]`) as HTMLInputElement | HTMLSelectElement;
+      const targetInput = form?.querySelector(`[name="attendee${targetNum}${field}"]`) as HTMLInputElement | HTMLSelectElement;
       if (sourceInput && targetInput) {
         targetInput.value = sourceInput.value;
         targetInput.disabled = true;
@@ -276,7 +331,7 @@ const conference = await getLatestConference();
   function resetAddressFields(targetNum: number) {
     const fields = ['Address', 'City', 'State', 'Zip'];
     fields.forEach(field => {
-      const input = form?.querySelector(`[name="attendee${targetNum}${field}"]`) as HTMLInputElement;
+      const input = form?.querySelector(`[name="attendee${targetNum}${field}"]`) as HTMLInputElement | HTMLSelectElement;
       if (input) {
         input.value = field === 'State' ? 'TN' : '';
         input.disabled = false;
@@ -315,7 +370,7 @@ const conference = await getLatestConference();
       const section = button.closest('.attendee-section');
       if (section) {
         section.classList.add('hidden');
-        const inputs = section.querySelectorAll('input');
+        const inputs = section.querySelectorAll('input, select');
         inputs.forEach(input => {
           input.value = '';
           input.required = false;
@@ -331,7 +386,7 @@ const conference = await getLatestConference();
     const hiddenSections = document.querySelectorAll('.attendee-section.hidden');
     if (hiddenSections.length > 0) {
       hiddenSections[0].classList.remove('hidden');
-      const inputs = hiddenSections[0].querySelectorAll('input');
+      const inputs = hiddenSections[0].querySelectorAll('input, select');
       inputs.forEach(input => input.required = true);
       updateTotalAmount(getVisibleAttendeeCount());
     }
