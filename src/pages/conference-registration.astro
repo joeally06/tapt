@@ -250,13 +250,62 @@ const states = [
               </p>
             </div>
 
-            <button
-              type="submit"
-              class="w-full bg-primary-600 text-white py-3 px-6 rounded-md hover:bg-primary-700 transition-colors font-medium"
-            >
-              Submit Registration
-            </button>
+            <div class="flex gap-4">
+              <button
+                type="submit"
+                class="flex-1 bg-primary-600 text-white py-3 px-6 rounded-md hover:bg-primary-700 transition-colors font-medium"
+              >
+                Submit Registration
+              </button>
+              <button
+                type="button"
+                id="print-form"
+                class="bg-gray-600 text-white py-3 px-6 rounded-md hover:bg-gray-700 transition-colors font-medium"
+              >
+                Print Form
+              </button>
+            </div>
           </form>
+
+          <!-- Print Template (hidden by default) -->
+          <div id="print-template" class="hidden">
+            <div class="print-content">
+              <style>
+                @media print {
+                  .print-content {
+                    padding: 20px;
+                  }
+                  .print-header {
+                    text-align: center;
+                    margin-bottom: 30px;
+                  }
+                  .print-attendee {
+                    margin-bottom: 30px;
+                    page-break-inside: avoid;
+                  }
+                  .print-field {
+                    margin-bottom: 10px;
+                  }
+                  .print-total {
+                    margin-top: 30px;
+                    border-top: 2px solid #000;
+                    padding-top: 10px;
+                  }
+                }
+              </style>
+              <div class="print-header">
+                <h1 style="font-size: 24px; font-weight: bold;">TAPT Conference Registration</h1>
+                <p>{conference.name}</p>
+                <p>{new Date(conference.start_date).toLocaleDateString()} - {new Date(conference.end_date).toLocaleDateString()}</p>
+                <p>{conference.location}</p>
+              </div>
+              <div id="print-attendees"></div>
+              <div class="print-total">
+                <p>Total Attendees: <span id="print-attendee-count"></span></p>
+                <p>Total Amount: $<span id="print-total-amount"></span></p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -265,7 +314,6 @@ const states = [
 
 <script>
   const form = document.getElementById('registration-form') as HTMLFormElement;
-  const attendeesContainer = document.getElementById('attendees-container');
   const addAttendeeBtn = document.getElementById('add-attendee');
   const attendeeCountSpan = document.getElementById('attendee-count');
   const totalAmountSection = document.getElementById('total-amount-section');
@@ -339,6 +387,76 @@ const states = [
     });
   }
 
+  function printForm() {
+    const printTemplate = document.getElementById('print-template');
+    const printAttendeesContainer = document.getElementById('print-attendees');
+    const printAttendeeCount = document.getElementById('print-attendee-count');
+    const printTotalAmount = document.getElementById('print-total-amount');
+    const organization = (form?.querySelector('[name="organization"]') as HTMLInputElement)?.value;
+    const visibleSections = getVisibleAttendeeSections();
+    
+    if (printAttendeesContainer) {
+      printAttendeesContainer.innerHTML = '';
+      
+      // Add organization
+      const orgDiv = document.createElement('div');
+      orgDiv.className = 'print-field';
+      orgDiv.innerHTML = `<strong>Organization:</strong> ${organization}`;
+      printAttendeesContainer.appendChild(orgDiv);
+
+      // Add attendees
+      visibleSections.forEach((section, index) => {
+        const attendeeNum = section.getAttribute('data-attendee');
+        const fields = [
+          { name: 'FirstName', label: 'First Name' },
+          { name: 'LastName', label: 'Last Name' },
+          { name: 'Address', label: 'Address' },
+          { name: 'City', label: 'City' },
+          { name: 'State', label: 'State' },
+          { name: 'Zip', label: 'ZIP Code' },
+          { name: 'Email', label: 'Email' },
+          { name: 'Phone', label: 'Phone' }
+        ];
+
+        const attendeeDiv = document.createElement('div');
+        attendeeDiv.className = 'print-attendee';
+        attendeeDiv.innerHTML = `<h2 style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">Attendee ${index + 1}</h2>`;
+
+        fields.forEach(field => {
+          const input = form?.querySelector(`[name="attendee${attendeeNum}${field.name}"]`) as HTMLInputElement | HTMLSelectElement;
+          const value = input instanceof HTMLSelectElement ? 
+            input.options[input.selectedIndex].text : 
+            input.value;
+          
+          const fieldDiv = document.createElement('div');
+          fieldDiv.className = 'print-field';
+          fieldDiv.innerHTML = `<strong>${field.label}:</strong> ${value}`;
+          attendeeDiv.appendChild(fieldDiv);
+        });
+
+        printAttendeesContainer.appendChild(attendeeDiv);
+      });
+    }
+
+    if (printAttendeeCount) {
+      printAttendeeCount.textContent = visibleSections.length.toString();
+    }
+
+    if (printTotalAmount) {
+      printTotalAmount.textContent = (visibleSections.length * PRICE_PER_ATTENDEE).toFixed(2);
+    }
+
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    if (printWindow && printTemplate) {
+      printWindow.document.write(printTemplate.innerHTML);
+      printWindow.document.close();
+      printWindow.focus();
+      printWindow.print();
+      printWindow.close();
+    }
+  }
+
   // Handle same address checkboxes
   document.querySelectorAll('[data-same-address]').forEach(checkbox => {
     checkbox.addEventListener('change', (e) => {
@@ -356,6 +474,9 @@ const states = [
       }
     });
   });
+
+  // Add print button event listener
+  document.getElementById('print-form')?.addEventListener('click', printForm);
 
   // Show first attendee section by default
   const firstAttendeeSection = document.querySelector('.attendee-section');
