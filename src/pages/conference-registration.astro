@@ -4,10 +4,6 @@ import { getLatestConference } from '../lib/db';
 
 const conference = await getLatestConference();
 
-if (!conference) {
-  return Astro.redirect('/no-conference');
-}
-
 const states = [
   { value: 'AL', label: 'Alabama' },
   { value: 'AK', label: 'Alaska' },
@@ -82,7 +78,7 @@ const states = [
               </div>
               <div>
                 <p class="text-gray-600">Registration Fee</p>
-                <p class="font-medium">${conference.price.toFixed(2)} per attendee</p>
+                <p class="font-medium">$175.00 per attendee</p>
               </div>
             </div>
           </div>
@@ -231,7 +227,7 @@ const states = [
               <div class="bg-gray-50 p-4 rounded-md">
                 <div class="flex justify-between items-center">
                   <span class="text-gray-700">Registration Fee (per attendee):</span>
-                  <span class="font-medium">${conference.price.toFixed(2)}</span>
+                  <span class="font-medium">$175.00</span>
                 </div>
                 <div class="flex justify-between items-center mt-2 text-lg font-bold text-primary-700">
                   <span>Total Amount:</span>
@@ -323,18 +319,8 @@ const states = [
   const totalAmountSection = document.getElementById('total-amount-section');
   const totalAmountSpan = document.getElementById('total-amount');
   const errorMessageDiv = document.getElementById('error-message');
-  let PRICE_PER_ATTENDEE = 175;
+  const PRICE_PER_ATTENDEE = 175;
   const MAX_ATTENDEES = 4;
-
-  // Get conference data and price
-  try {
-    const conferenceData = JSON.parse(form?.dataset.conference || '{}');
-    if (conferenceData.price) {
-      PRICE_PER_ATTENDEE = conferenceData.price;
-    }
-  } catch (error) {
-    console.error('Error parsing conference data:', error);
-  }
 
   function showError(message: string) {
     if (errorMessageDiv) {

@@ -8,6 +8,7 @@ export const POST: APIRoute = async ({ request }) => {
   };
 
   try {
+    // Validate that we have a request body before trying to parse it
     const contentLength = request.headers.get('content-length');
     if (!contentLength || parseInt(contentLength) === 0) {
       console.error('Empty request body received');
@@ -20,7 +21,7 @@ export const POST: APIRoute = async ({ request }) => {
     let data;
     try {
       data = await request.json();
-      console.log('Received registration data:', data);
+      console.log('Successfully parsed request body:', data);
     } catch (parseError) {
       console.error('Failed to parse request body:', parseError);
       return new Response(
@@ -29,6 +30,7 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
+    // Validate required fields
     if (!data || typeof data !== 'object') {
       console.error('Invalid data format received:', data);
       return new Response(
@@ -63,13 +65,10 @@ export const POST: APIRoute = async ({ request }) => {
         );
       }
 
-      const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'state', 'zip'];
-      const missingFields = requiredFields.filter(field => !attendee[field]);
-      
-      if (missingFields.length > 0) {
-        console.error('Missing required attendee fields:', missingFields);
+      if (!attendee.firstName || !attendee.lastName) {
+        console.error('Missing required attendee fields:', attendee);
         return new Response(
-          JSON.stringify({ error: `Missing required fields for attendee: ${missingFields.join(', ')}` }), 
+          JSON.stringify({ error: 'First name and last name are required for all attendees' }), 
           { status: 400, headers }
         );
       }
@@ -103,6 +102,7 @@ export const POST: APIRoute = async ({ request }) => {
   } catch (error) {
     console.error('Registration error:', error);
     
+    // Ensure we always return a valid JSON response even for unexpected errors
     const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred during registration';
     return new Response(
       JSON.stringify({ 
