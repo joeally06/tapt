@@ -1,20 +1,114 @@
+---
 const sponsors = [
   {
     name: "Central States Bus Sales",
     description: "Blue Bird Bus Company",
-    logo: "/images/sponsors/blue-bird.jpg",
+    logo: "https://static.wixstatic.com/media/307eed_b4b8f4868c2c4a8386bffe5a1ba9685f~mv2.jpg/v1/fill/w_271,h_211,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Blue%20Bird%20Logo.jpg",
     website: "https://www.centralstatesbus.com/"
   },
   {
     name: "Cumberland IC Bus",
     description: "International IC Bus",
-    logo: "/images/sponsors/ic-bus.jpg",
+    logo: "https://static.wixstatic.com/media/307eed_0dd43a24fec04a7995daa7e5bbd9404f~mv2.jpg/v1/fill/w_275,h_223,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/IC%20Bus%20Logo.jpg",
     website: "https://cumberland-companies.com/ic-bus/"
   },
   {
     name: "Mid-South Bus Center",
     description: "Thomas Bus Company",
-    logo: "/images/sponsors/thomas-bus.png",
+    logo: "https://static.wixstatic.com/media/307eed_032de959c29c4cc5bf5bdac05316f1e9~mv2.png/v1/fill/w_275,h_228,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Thomas_Built_Buses-3496034165.png",
     website: "https://www.thebuscenter.com/"
   }
 ];
+
+const associations = [
+  {
+    name: "National School Transportation Association",
+    logo: "https://static.wixstatic.com/media/307eed_6f56788601a24f688f6724ba886b11b7~mv2.png/v1/crop/x_0,y_0,w_179,h_54/fill/w_251,h_75,al_c,lg_1,q_85,enc_avif,quality_auto/307eed_6f56788601a24f688f6724ba886b11b7~mv2.png",
+    website: "https://yellowbuses.org/"
+  },
+  {
+    name: "National Association for Pupil Transportation",
+    logo: "https://static.wixstatic.com/media/307eed_ff451264d8f840c7b903da8894940bb9~mv2.png/v1/fill/w_308,h_101,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/NAPT%20LOGO.png",
+    website: "https://www.napt.org/"
+  },
+  {
+    name: "School Transportation News",
+    logo: "https://static.wixstatic.com/media/307eed_b0c0e37fb9fc43dabf20bb1bc6ab2ed5~mv2.png/v1/fill/w_409,h_121,al_c,lg_1,q_85,enc_avif,quality_auto/School%20Trans%20News.png",
+    website: "https://stnonline.com/"
+  }
+];
+---
+
+<section id="sponsors" class="py-16 bg-gray-50">
+  <div class="container mx-auto px-4">
+    <div class="max-w-3xl mx-auto text-center mb-12">
+      <h2 class="text-3xl font-bold text-primary-800 mb-4">Our Sponsors</h2>
+      <div class="w-20 h-1 bg-accent-500 mx-auto mb-6"></div>
+      <p class="text-lg text-gray-600">We're grateful to partner with these sponsors who help make our work possible.</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+      {sponsors.map(sponsor => (
+        <a 
+          href={sponsor.website}
+          target="_blank"
+          rel="noopener"
+          class="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow text-center group"
+        >
+          <div class="h-40 flex items-center justify-center mb-4">
+            <img 
+              src={sponsor.logo} 
+              alt={sponsor.name}
+              class="max-h-full max-w-full object-contain"
+            />
+          </div>
+          <h3 class="text-xl font-semibold text-primary-700 mb-2 group-hover:text-primary-800">{sponsor.name}</h3>
+          <p class="text-gray-600 mb-4">{sponsor.description}</p>
+          <div class="text-primary-600 group-hover:text-primary-700 flex items-center justify-center text-sm font-medium">
+            <span>Visit Website</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 transform group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </div>
+        </a>
+      ))}
+    </div>
+    
+    <div class="max-w-3xl mx-auto text-center mb-12">
+      <h2 class="text-2xl font-bold text-primary-800 mb-4">National Associations</h2>
+      <div class="w-16 h-1 bg-accent-500 mx-auto mb-6"></div>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {associations.map(association => (
+        <a 
+          href={association.website}
+          target="_blank"
+          rel="noopener"
+          class="bg-white rounded-lg p-6 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition-shadow"
+        >
+          <div class="h-24 flex items-center justify-center mb-4">
+            <img 
+              src={association.logo} 
+              alt={association.name}
+              class="max-h-full max-w-full object-contain"
+            />
+          </div>
+          <p class="text-gray-600 text-sm text-center">Click to Visit</p>
+        </a>
+      ))}
+    </div>
+    
+    <div class="mt-16 text-center">
+      <a 
+        href="/become-sponsor" 
+        class="inline-flex items-center justify-center py-3 px-6 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-md transition-colors"
+      >
+        Become a Sponsor
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
