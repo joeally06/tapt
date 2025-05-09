@@ -138,11 +138,11 @@ const boardMembers = [
         {boardMembers.map(member => (
           <div class="bg-white rounded-lg shadow-md overflow-hidden">
             {member.image && (
-              <div class="h-48 overflow-hidden">
+              <div class="relative pt-[75%]">
                 <img 
                   src={member.image} 
                   alt={member.name}
-                  class="w-full h-full object-cover object-center"
+                  class="absolute inset-0 w-full h-full object-contain p-2"
                   loading="lazy"
                 />
               </div>
