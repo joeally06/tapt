@@ -1,12 +1,11 @@
-import Database from 'better-sqlite3';
+import { createClient } from '@libsql/client';
 
-const db = new Database('conference.db');
-
-// Enable foreign keys
-db.pragma('foreign_keys = ON');
+const db = createClient({
+  url: 'file:conference.db'
+});
 
 // Initialize database with required tables
-db.exec(`
+await db.execute(`
   CREATE TABLE IF NOT EXISTS conferences (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
@@ -38,61 +37,77 @@ db.exec(`
 `);
 
 // Insert sample conference if none exists
-const conferenceCount = db.prepare('SELECT COUNT(*) as count FROM conferences').get();
-if (conferenceCount.count === 0) {
-  db.prepare(`
-    INSERT INTO conferences (id, name, start_date, end_date, location, description, price, max_attendees)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-  `).run(
-    'conf-2025',
-    '2025 TAPT Conference & Trade Show',
-    '2025-06-02',
-    '2025-06-04',
-    'Music Road Hotel, Pigeon Forge-Gatlinburg',
-    'Join us for the annual Tennessee Association of Pupil Transportation Conference and Trade Show.',
-    175.00,
-    200
-  );
+const conferenceCount = await db.execute('SELECT COUNT(*) as count FROM conferences');
+if (conferenceCount.rows[0].count === 0) {
+  await db.execute({
+    sql: `
+      INSERT INTO conferences (id, name, start_date, end_date, location, description, price, max_attendees)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `,
+    args: [
+      'conf-2025',
+      '2025 TAPT Conference & Trade Show',
+      '2025-06-02',
+      '2025-06-04',
+      'Music Road Hotel, Pigeon Forge-Gatlinburg',
+      'Join us for the annual Tennessee Association of Pupil Transportation Conference and Trade Show.',
+      175.00,
+      200
+    ]
+  });
 }
 
-export const getLatestConference = () => {
-  return db.prepare('SELECT * FROM conferences ORDER BY start_date ASC LIMIT 1').get();
+export const getLatestConference = async () => {
+  const result = await db.execute('SELECT * FROM conferences ORDER BY start_date ASC LIMIT 1');
+  return result.rows[0];
 };
 
-export const createRegistration = (data) => {
+export const createRegistration = async (data) => {
   const registrationId = 'reg-' + Math.random().toString(36).substr(2, 9);
   
-  const insertRegistration = db.prepare(`
-    INSERT INTO registrations (id, organization, total_attendees, total_amount, conference_id)
-    VALUES (?, ?, ?, ?, ?)
-  `);
+  // Begin transaction
+  await db.execute('BEGIN');
 
-  const insertAttendee = db.prepare(`
-    INSERT INTO attendees (id, registration_id, first_name, last_name)
-    VALUES (?, ?, ?, ?)
-  `);
-
-  const transaction = db.transaction((data) => {
-    insertRegistration.run(
-      registrationId,
-      data.organization,
-      data.attendees.length,
-      data.totalAmount,
-      'conf-2025'
-    );
-
-    data.attendees.forEach((attendee, index) => {
-      const attendeeId = `att-${registrationId}-${index + 1}`;
-      insertAttendee.run(
-        attendeeId,
+  try {
+    // Insert registration
+    await db.execute({
+      sql: `
+        INSERT INTO registrations (id, organization, total_attendees, total_amount, conference_id)
+        VALUES (?, ?, ?, ?, ?)
+      `,
+      args: [
         registrationId,
-        attendee.firstName,
-        attendee.lastName
-      );
+        data.organization,
+        data.attendees.length,
+        data.totalAmount,
+        'conf-2025'
+      ]
     });
 
-    return { id: registrationId };
-  });
+    // Insert attendees
+    for (let i = 0; i < data.attendees.length; i++) {
+      const attendee = data.attendees[i];
+      const attendeeId = `att-${registrationId}-${i + 1}`;
+      await db.execute({
+        sql: `
+          INSERT INTO attendees (id, registration_id, first_name, last_name)
+          VALUES (?, ?, ?, ?)
+        `,
+        args: [
+          attendeeId,
+          registrationId,
+          attendee.firstName,
+          attendee.lastName
+        ]
+      });
+    }
 
-  return transaction(data);
+    // Commit transaction
+    await db.execute('COMMIT');
+    return { id: registrationId };
+  } catch (error) {
+    // Rollback on error
+    await db.execute('ROLLBACK');
+    throw error;
+  }
 };
