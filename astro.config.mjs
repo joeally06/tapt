@@ -7,7 +7,15 @@ export default defineConfig({
   integrations: [tailwind()],
   vite: {
     build: {
-      target: 'es2020'
+      target: 'es2022'
+    },
+    server: {
+      hmr: {
+        timeout: 120000
+      },
+      fs: {
+        allow: ['.']
+      }
     }
   }
 });
