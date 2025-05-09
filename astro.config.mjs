@@ -5,6 +5,9 @@ import tailwind from '@astrojs/tailwind';
 // https://astro.build/config
 export default defineConfig({
   integrations: [tailwind()],
+  devToolbar: {
+    enabled: false  // Temporarily disable dev toolbar to work around fetch error
+  },
   vite: {
     build: {
       target: 'es2022'
