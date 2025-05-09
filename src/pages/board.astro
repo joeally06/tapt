@@ -127,59 +127,60 @@ const boardMembers = [
         <img 
           src="https://static.wixstatic.com/media/307eed_8d0f578760464bb09b51ed47b80c0411~mv2.jpg"
           alt="TAPT Board Header"
-          class="w-full max-w-md mx-auto mb-8 rounded-lg shadow-md"
+          class="w-full max-w-sm mx-auto mb-8 rounded-lg shadow-md"
         />
         <h1 class="text-3xl font-bold text-primary-800 mb-4">2025-2026 TAPT Board of Directors</h1>
         <div class="w-20 h-1 bg-accent-500 mx-auto mb-6"></div>
         <p class="text-lg text-gray-600">Contact a board member below for TAPT organization questions or suggestions.</p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {boardMembers.map(member => (
           <div class="bg-white rounded-lg shadow-md overflow-hidden">
             {member.image && (
-              <div class="h-64 overflow-hidden">
+              <div class="h-48 overflow-hidden">
                 <img 
                   src={member.image} 
                   alt={member.name}
-                  class="w-full h-full object-cover"
+                  class="w-full h-full object-cover object-center"
+                  loading="lazy"
                 />
               </div>
             )}
-            <div class="p-6">
-              <h2 class="text-xl font-bold text-primary-700 mb-1">{member.name}</h2>
-              <p class="text-lg font-semibold text-primary-600 mb-2">{member.title}</p>
+            <div class="p-4">
+              <h2 class="text-lg font-bold text-primary-700 mb-1">{member.name}</h2>
+              <p class="text-base font-semibold text-primary-600 mb-2">{member.title}</p>
               {member.additionalTitle && (
-                <p class="text-primary-600 mb-2">{member.additionalTitle}</p>
+                <p class="text-sm text-primary-600 mb-2">{member.additionalTitle}</p>
               )}
               {member.term && (
-                <p class="text-sm text-gray-500 mb-4">Election Term: {member.term}</p>
+                <p class="text-xs text-gray-500 mb-3">Election Term: {member.term}</p>
               )}
               
-              <div class="space-y-2 mb-4">
-                <p class="text-gray-700">{member.role}</p>
-                <p class="text-gray-700">{member.organization}</p>
+              <div class="space-y-1 mb-3">
+                <p class="text-sm text-gray-700">{member.role}</p>
+                <p class="text-sm text-gray-700">{member.organization}</p>
                 {member.location && (
-                  <p class="text-gray-600 text-sm">{member.location}</p>
+                  <p class="text-xs text-gray-600">{member.location}</p>
                 )}
               </div>
 
               {member.contact && (
-                <div class="space-y-1 mb-4">
+                <div class="space-y-1 mb-3">
                   {member.contact.office && (
-                    <p class="text-sm">
+                    <p class="text-xs">
                       <span class="font-medium">Office:</span> {member.contact.office}
                     </p>
                   )}
                   {member.contact.cell && (
-                    <p class="text-sm">
+                    <p class="text-xs">
                       <span class="font-medium">Cell:</span> {member.contact.cell}
                     </p>
                   )}
                   {member.contact.email && (
                     <a 
                       href={`mailto:${member.contact.email}`}
-                      class="text-sm text-primary-600 hover:text-primary-800 block"
+                      class="text-xs text-primary-600 hover:text-primary-800 block"
                     >
                       {member.contact.email}
                     </a>
@@ -188,7 +189,7 @@ const boardMembers = [
               )}
 
               {member.notes && (
-                <p class="text-sm text-gray-600 italic mb-4">{member.notes}</p>
+                <p class="text-xs text-gray-600 italic mb-3">{member.notes}</p>
               )}
 
               {member.website && (
@@ -196,10 +197,10 @@ const boardMembers = [
                   href={member.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="inline-flex items-center text-primary-600 hover:text-primary-800"
+                  class="inline-flex items-center text-xs text-primary-600 hover:text-primary-800"
                 >
                   <span>Visit District Website</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 ml-1" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
                     <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
                   </svg>
