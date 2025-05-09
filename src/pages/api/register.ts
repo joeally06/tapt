@@ -65,7 +65,7 @@ export const POST: APIRoute = async ({ request }) => {
         );
       }
 
-      if (!attendee.firstName || !attendee.lastName) {
+      if (!attendee.firstname || !attendee.lastname) {
         console.error('Missing required attendee fields:', attendee);
         return new Response(
           JSON.stringify({ error: 'First name and last name are required for all attendees' }), 
