@@ -5,8 +5,11 @@ const db = createClient({
 });
 
 // Initialize database with required tables
+let transactionStarted = false;
 try {
+  // Start transaction
   await db.execute('BEGIN');
+  transactionStarted = true;
   
   await db.execute(`
     CREATE TABLE IF NOT EXISTS conferences (
@@ -119,6 +122,7 @@ try {
   `);
 
   await db.execute('COMMIT');
+  transactionStarted = false;
 
   // Insert sample conference if none exists
   const conferenceCount = await db.execute('SELECT COUNT(*) as count FROM conferences');
@@ -195,7 +199,10 @@ try {
     }
   }
 } catch (error) {
-  await db.execute('ROLLBACK');
+  // Only attempt rollback if a transaction is active
+  if (transactionStarted) {
+    await db.execute('ROLLBACK');
+  }
   console.error('Database initialization error:', error);
   throw error;
 }
