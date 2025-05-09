@@ -1,11 +1,12 @@
-import { createClient } from '@libsql/client';
+import Database from 'better-sqlite3';
 
-const client = createClient({
-  url: 'file:conference.db',
-});
+const db = new Database('conference.db');
+
+// Enable foreign keys
+db.pragma('foreign_keys = ON');
 
 // Initialize database with required tables
-await client.execute(`
+db.exec(`
   CREATE TABLE IF NOT EXISTS conferences (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
@@ -37,48 +38,61 @@ await client.execute(`
 `);
 
 // Insert sample conference if none exists
-const conferenceCount = await client.execute('SELECT COUNT(*) as count FROM conferences');
-if (conferenceCount.rows[0].count === 0) {
-  await client.execute(`
+const conferenceCount = db.prepare('SELECT COUNT(*) as count FROM conferences').get();
+if (conferenceCount.count === 0) {
+  db.prepare(`
     INSERT INTO conferences (id, name, start_date, end_date, location, description, price, max_attendees)
-    VALUES (
-      'conf-2025',
-      '2025 TAPT Conference & Trade Show',
-      '2025-06-02',
-      '2025-06-04',
-      'Music Road Hotel, Pigeon Forge-Gatlinburg',
-      'Join us for the annual Tennessee Association of Pupil Transportation Conference and Trade Show.',
-      175.00,
-      200
-    )
-  `);
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(
+    'conf-2025',
+    '2025 TAPT Conference & Trade Show',
+    '2025-06-02',
+    '2025-06-04',
+    'Music Road Hotel, Pigeon Forge-Gatlinburg',
+    'Join us for the annual Tennessee Association of Pupil Transportation Conference and Trade Show.',
+    175.00,
+    200
+  );
 }
 
-export const getLatestConference = async () => {
-  const result = await client.execute('SELECT * FROM conferences ORDER BY start_date ASC LIMIT 1');
-  return result.rows[0];
+export const getLatestConference = () => {
+  return db.prepare('SELECT * FROM conferences ORDER BY start_date ASC LIMIT 1').get();
 };
 
-export const createRegistration = async (data) => {
+export const createRegistration = (data) => {
   const registrationId = 'reg-' + Math.random().toString(36).substr(2, 9);
   
-  await client.transaction(async (tx) => {
-    // Create registration
-    await tx.execute(`
-      INSERT INTO registrations (id, organization, total_attendees, total_amount, conference_id)
-      VALUES (?, ?, ?, ?, ?)
-    `, [registrationId, data.organization, data.attendees.length, data.totalAmount, 'conf-2025']);
+  const insertRegistration = db.prepare(`
+    INSERT INTO registrations (id, organization, total_attendees, total_amount, conference_id)
+    VALUES (?, ?, ?, ?, ?)
+  `);
 
-    // Create attendees
-    for (let i = 0; i < data.attendees.length; i++) {
-      const attendee = data.attendees[i];
-      const attendeeId = `att-${registrationId}-${i + 1}`;
-      await tx.execute(`
-        INSERT INTO attendees (id, registration_id, first_name, last_name)
-        VALUES (?, ?, ?, ?)
-      `, [attendeeId, registrationId, attendee.firstName, attendee.lastName]);
-    }
+  const insertAttendee = db.prepare(`
+    INSERT INTO attendees (id, registration_id, first_name, last_name)
+    VALUES (?, ?, ?, ?)
+  `);
+
+  const transaction = db.transaction((data) => {
+    insertRegistration.run(
+      registrationId,
+      data.organization,
+      data.attendees.length,
+      data.totalAmount,
+      'conf-2025'
+    );
+
+    data.attendees.forEach((attendee, index) => {
+      const attendeeId = `att-${registrationId}-${index + 1}`;
+      insertAttendee.run(
+        attendeeId,
+        registrationId,
+        attendee.firstName,
+        attendee.lastName
+      );
+    });
+
+    return { id: registrationId };
   });
 
-  return { id: registrationId };
+  return transaction(data);
 };
